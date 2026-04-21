@@ -66,6 +66,7 @@ function openpopup(window){
 var people = []
 function refreshcontacts(){
   const contactsraw = localStorage.getItem('contacts')
+  window.alert(contactsraw)
   var contacts
   if (contactsraw==null){
     contacts = []
