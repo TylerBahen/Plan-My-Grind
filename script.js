@@ -77,7 +77,7 @@ function refreshcontacts(){
 }
 
 //upload contacts from device using the experimental feature
-function uploadContacts(){
+async function uploadContacts(){
   const props = ["name", "email", "tel"];
   const opts = { multiple: true };
 
