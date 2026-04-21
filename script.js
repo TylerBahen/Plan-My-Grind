@@ -72,9 +72,21 @@ function refreshcontacts(){
   } else {
     contacts = JSON.parse(contactsraw).list
   }
+  var display = ''
   contacts.forEach(contact => {
-    //
+    display+=`<div class="person"><h1>${contact.name}</h1>`
+    if (contact.tel!=[]){
+      contact.tel.forEach(number => {
+        display+=`<p>${formatPhone(number)} : <a href="tel:${number}">Call</a> / <a href="sms:${number}">Text</a></p>`
+      })
+    }
+    if (contact.email!=[]){
+      contact.email.forEach(address => {
+        display+=`<p>${address} : <a href="mailto:${address}">Email</a></p>`
+      })
+    }
   })
+  document.getElementById('peopleDisplay').innerHTML = display
   people = contacts
 }
 
@@ -83,13 +95,23 @@ function newPerson(){
   const cn = document.getElementById('contactName')
   const ct = document.getElementById('contactTel')
   const ce = document.getElementById('contactEmail')
-  people.push({'name':cn.value,'tel':[ct.value],'email':[ce.value]})
-  localStorage.setItem('contacts',JSON.stringify({'list':people}))
-  cn.value = ''
-  ct.value = ''
-  ce.value = ''
-  window.location.hash = 'People'
-  refreshcontacts()
+  if (cn.value!='' && (ct.value!='' || ce.value!='')){
+    var tel = []
+    if (toDigits(ct.value)!=''){
+      tel = [toDigits(ct.value)]
+    }
+    var email = []
+    if (ce.value!=''){
+      email = [ce.value]
+    }
+    people.push({'name':cn.value,'tel':tel,'email':email})
+    localStorage.setItem('contacts',JSON.stringify({'list':people}))
+    cn.value = ''
+    ct.value = ''
+    ce.value = ''
+    window.location.hash = 'People'
+    refreshcontacts()
+  }
 }
 
 //upload contacts from device using the experimental feature
