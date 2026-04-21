@@ -9,25 +9,22 @@ if ("serviceWorker" in navigator) {
 
 window.addEventListener('hashchange',() => {
   const page = window.location.hash.replace('#','')
-  changeview(page)
-})
-
-function changeview(page){
+  console.log(page)
   switch (page){
     case '':
     case 'Home':
-      changetab('Home')
+      changeview('Home')
       break
     case 'Goals':
     case 'Planner':
     case 'People':
     case 'Settings':
-      changetab(page)
+      changeview(page)
       break
   }
-}
+})
 
-function changetab(window){
+function changeview(window){
   document.getElementById('title').innerHTML = window
   const windows = ['Goals', 'Planner', 'Home', 'People', 'Settings']
     windows.forEach((i) => {
@@ -44,4 +41,4 @@ function emit(action,messageRaw){
     });
 }
 
-changeview('')
+changeview('Home')
