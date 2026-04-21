@@ -15,6 +15,7 @@ window.addEventListener('hashchange',() => {
 function changeview(page){
   switch (page){
     case '':
+    case 'Home':
       changetab('Home')
       break
     case 'Goals':
