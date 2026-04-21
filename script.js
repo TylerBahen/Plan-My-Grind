@@ -92,7 +92,7 @@ async function uploadContacts(){
 //Onload function
 function load(){
   refreshcontacts()
-  changeview('Home')
+  window.location.hash = 'Home'
   if (contactsSupported!=true){
     document.getElementById('contactsUploadBtn').style.display = 'none'
   }
