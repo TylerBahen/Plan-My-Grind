@@ -83,9 +83,9 @@ function uploadContacts(){
 
   try {
     const contacts = await navigator.contacts.select(props, opts);
-    alert(contacts);
+    window.alert(contacts);
   } catch (err) {
-    alert(err);
+    window.alert(err);
   }
 }
 
