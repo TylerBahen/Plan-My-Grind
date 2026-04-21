@@ -74,7 +74,7 @@ function refreshcontacts(){
     contacts = JSON.parse(contactsraw.list)
   }
   contacts.forEach(contact => {
-    window.alert(JSON.stringify(contact))
+    window.alert(contact)
   })
   people = contacts
 }
@@ -97,7 +97,7 @@ async function uploadContacts(){
       })
       people.push({'name':contact.name[0],'tel':numbers,'email':contact.email})
     })
-    localStorage.setItem('contacts',people)
+    localStorage.setItem('contacts',JSON.stringify({'list':people}))
     window.alert('Contacts Stored!')
     window.location.hash = 'People'
     refreshcontacts()
