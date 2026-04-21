@@ -13,7 +13,6 @@ window.addEventListener('hashchange',() => {
 })
 
 function changeview(page){
-  alert(page)
   switch (page){
     case '':
       changetab('Home')
