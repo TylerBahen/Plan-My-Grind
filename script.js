@@ -66,29 +66,37 @@ function openpopup(window){
 var people = []
 function refreshcontacts(){
   const contactsraw = localStorage.getItem('contacts')
-  window.alert(contactsraw)
   var contacts
   if (contactsraw==null){
     contacts = []
   } else {
-    contacts = JSON.parse(contactsraw.list)
+    contacts = JSON.parse(contactsraw).list
   }
   contacts.forEach(contact => {
-    window.alert(contact)
+    //
   })
   people = contacts
 }
 
 //Take form stuff and create contact
 function newPerson(){
-  //
+  const cn = document.getElementById('contactName')
+  const ct = document.getElementById('contactTel')
+  const ce = document.getElementById('contactEmail')
+  people.push({'name':cn.value,'tel':[ct.value],'email':[ce.value]})
+  localStorage.setItem('contacts',JSON.stringify({'list':people}))
+  cn.value = ''
+  ct.value = ''
+  ce.value = ''
+  window.location.hash = 'People'
+  refreshcontacts()
 }
 
 //upload contacts from device using the experimental feature
 async function uploadContacts(){
   const props = ["name", "email", "tel"];
   const opts = { multiple: true };
-  try {
+  try { 
     const contacts = await navigator.contacts.select(props, opts);
     contacts.forEach(contact => {
       var numbers = []
@@ -98,7 +106,6 @@ async function uploadContacts(){
       people.push({'name':contact.name[0],'tel':numbers,'email':contact.email})
     })
     localStorage.setItem('contacts',JSON.stringify({'list':people}))
-    window.alert('Contacts Stored!')
     window.location.hash = 'People'
     refreshcontacts()
   } catch (err) {
