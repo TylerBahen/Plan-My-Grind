@@ -83,7 +83,7 @@ async function uploadContacts(){
 
   try {
     const contacts = await navigator.contacts.select(props, opts);
-    window.alert(contacts);
+    window.alert(JSON.parse(contacts));
   } catch (err) {
     window.alert(err);
   }
