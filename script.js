@@ -63,6 +63,7 @@ function openpopup(window){
 }
 
 //pull all the contacts and put them on the page
+var people = []
 function refreshcontacts(){
   const contactsraw = localStorage.getItem('contacts')
   var contacts
@@ -74,19 +75,37 @@ function refreshcontacts(){
   contacts.forEach(contact => {
     console.log(contact)
   })
+  people = contacts
 }
 
 //upload contacts from device using the experimental feature
 async function uploadContacts(){
   const props = ["name", "email", "tel"];
   const opts = { multiple: true };
-
   try {
     const contacts = await navigator.contacts.select(props, opts);
     window.alert(JSON.stringify(contacts));
+    contacts.forEach(contact => {
+      var numbers = []
+      contact.tel.forEach(number => {
+        numbers.push(toDigits(number))
+      })
+      people.push({'name':contact.name[0],'tel':numbers,'email':contact.email})
+    })
+    window.alert(people)
   } catch (err) {
     window.alert(err);
   }
+}
+
+//Phone Number Formatting
+function toDigits(phone) {
+  const d = phone.replace(/\D/g, "");
+  return d.slice(-10);
+}
+function formatPhone(digits) {
+  const d = digits.replace(/\D/g, "");
+  return d.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
 }
 
 //Onload function
