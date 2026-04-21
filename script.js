@@ -78,7 +78,15 @@ function refreshcontacts(){
 
 //upload contacts from device using the experimental feature
 function uploadContacts(){
-  navigator.contacts.select()
+  const props = ["name", "email", "tel"];
+  const opts = { multiple: true };
+
+  try {
+    const contacts = await navigator.contacts.select(props, opts);
+    alert(contacts);
+  } catch (err) {
+    alert(err);
+  }
 }
 
 //Onload function
