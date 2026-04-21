@@ -22,7 +22,9 @@
 }
 
 .mainview {
+    visibility: hidden;
     position: absolute;
+    overflow: auto;
     top:100px;
     height: calc(100%-200px);
 }

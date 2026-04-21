@@ -13,7 +13,27 @@ window.addEventListener('hashchange',() => {
 })
 
 function changeview(page){
-  document.getElementById('title').innerHTML = page
+  console.log(page)
+  switch (page){
+    case '':
+      changetab('Home')
+      break
+    case 'Goals':
+    case 'Planner':
+    case 'People':
+    case 'Settings':
+      changetab(page)
+      break
+  }
+}
+
+function changetab(window){
+  document.getElementById('title').innerHTML = window
+  const windows = ['Goals', 'Planner', 'Home', 'People', 'Settings']
+    windows.forEach((i) => {
+        document.getElementById(i).style.visibility = 'hidden'
+    })
+    document.getElementById(window).style.visibility = 'visible'
 }
 
 function emit(action,messageRaw){
@@ -24,4 +44,4 @@ function emit(action,messageRaw){
     });
 }
 
-changeview('Home')
+changeview('')
