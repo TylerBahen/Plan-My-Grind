@@ -8,10 +8,12 @@ if ("serviceWorker" in navigator) {
 
 }
 
+const contactsSupported = "contacts" in navigator && "ContactsManager" in window;
+
 //Grab when the page changes hash url and handle it
 window.addEventListener('hashchange',() => {
   const page = window.location.hash.replace('#','')
-  console.log(page)
+  closepopups()
   switch (page){
     case '':
     case 'Home':
@@ -22,6 +24,9 @@ window.addEventListener('hashchange',() => {
     case 'People':
     case 'Settings':
       changeview(page)
+      break
+    case 'NewPerson':
+      openpopup(page)
       break
   }
 })
@@ -45,21 +50,42 @@ function emit(action,messageRaw){
     });
 }
 
+//Close any popup windows
+function closepopups(){
+  const popups = ['NewPerson']
+  popups.forEach((popup) => {
+    document.getElementById(popup).style.visibility = 'hidden'
+  })
+}
+//Open the specified window
+function openpopup(window){
+  document.getElementById(window).style.visibility = 'visible'
+}
+
 //pull all the contacts and put them on the page
 function refreshcontacts(){
   const contactsraw = localStorage.getItem('contacts')
+  var contacts
   if (contactsraw==null){
-    const contacts = []
+    contacts = []
   } else {
-    const contacts = JSON.parse(contactsraw.list)
+    contacts = JSON.parse(contactsraw.list)
   }
   contacts.forEach(contact => {
     console.log(contact)
   })
 }
 
+//upload contacts from device using the experimental feature
+function uploadContacts(){
+  navigator.contacts.select()
+}
+
 //Onload function
 function load(){
   refreshcontacts()
   changeview('Home')
+  if (contactsSupported!=true){
+    document.getElementById('contactsUploadBtn').style.display = 'none'
+  }
 }
