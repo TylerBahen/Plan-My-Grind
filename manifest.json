@@ -1,7 +1,8 @@
 {
   "name": "Plan My Grind",
   "short_name": "Plan My Grind",
-  "start_url": "/index.html",
+  "start_url": "/Plan-My-Grind/",
+  "scope":"/Plan-My-Grind/",
   "display": "standalone",
   "background_color": "#001C55",
   "theme_color": "#001C55",
