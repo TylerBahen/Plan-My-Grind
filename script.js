@@ -98,6 +98,9 @@ async function uploadContacts(){
       people.push({'name':contact.name[0],'tel':numbers,'email':contact.email})
     })
     localStorage.setItem('contacts',people)
+    window.alert('Contacts Stored!')
+    window.location.hash = 'People'
+    refreshcontacts()
   } catch (err) {
     window.alert(err);
   }
