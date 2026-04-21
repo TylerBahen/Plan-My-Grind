@@ -117,7 +117,7 @@ function formatPhone(digits) {
 function load(){
   refreshcontacts()
   window.location.hash = ''
-  changeview('Home')
+  window.location.hash = 'Home'
   if (contactsSupported!=true){
     document.getElementById('contactsUploadBtn').style.display = 'none'
   }
