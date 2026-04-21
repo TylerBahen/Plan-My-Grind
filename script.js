@@ -78,6 +78,11 @@ function refreshcontacts(){
   people = contacts
 }
 
+//Take form stuff and create contact
+function newPerson(){
+  //
+}
+
 //upload contacts from device using the experimental feature
 async function uploadContacts(){
   const props = ["name", "email", "tel"];
