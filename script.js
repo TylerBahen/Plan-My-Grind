@@ -73,7 +73,7 @@ function refreshcontacts(){
     contacts = JSON.parse(contactsraw.list)
   }
   contacts.forEach(contact => {
-    console.log(contact)
+    window.alert(JSON.stringify(contact))
   })
   people = contacts
 }
@@ -84,7 +84,6 @@ async function uploadContacts(){
   const opts = { multiple: true };
   try {
     const contacts = await navigator.contacts.select(props, opts);
-    window.alert(JSON.stringify(contacts));
     contacts.forEach(contact => {
       var numbers = []
       contact.tel.forEach(number => {
@@ -92,7 +91,7 @@ async function uploadContacts(){
       })
       people.push({'name':contact.name[0],'tel':numbers,'email':contact.email})
     })
-    window.alert(people)
+    localStorage.setItem('contacts',people)
   } catch (err) {
     window.alert(err);
   }
