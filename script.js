@@ -2,7 +2,7 @@
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("service-worker.js")
     .then(() => {
-        console.log("SW registered")
+        console.log("Service Worker registered, we are clear for takeoff...")
     })
     .catch(err => console.error("SW registration failed:", err));
 
@@ -56,10 +56,17 @@ function closepopups(){
   popups.forEach((popup) => {
     document.getElementById(popup).style.visibility = 'hidden'
   })
+  document.getElementById('blanket').style.visibility = 'hidden'
 }
 //Open the specified window
 function openpopup(window){
   document.getElementById(window).style.visibility = 'visible'
+  document.getElementById('blanket').style.visibility = 'visible'
+}
+
+//the backward navigation function for popup windows
+function navBack(){
+  history.back()
 }
 
 //pull all the contacts and put them on the page
@@ -149,16 +156,25 @@ function formatPhone(digits) {
 
 //Onload function
 function load(){
-  refreshcontacts()
   window.location.hash = ''
   window.location.hash = 'Home'
   if (contactsSupported!=true){
     document.getElementById('contactsUploadBtn').style.display = 'none'
+    console.log('Contacts negative')
+  } else {
+    console.log('Contacts affirmative')
   }
   if (Notification.permission!='granted'){
     console.log('Asking for permission for notifications...')
-    Notification.requestPermission()
+    Notification.requestPermission().then(permission => {
+      if (permission == 'granted'){
+        console.log('Notifications affirmative')
+      } else if(permission == 'denied'){
+        console.log('Notifications negative')
+      }
+    })
   } else {
-    console.log('Notifications affirmative, we are clear for takeoff...')
+    console.log('Notifications affirmative')
   }
+  refreshcontacts()
 }

@@ -17,9 +17,10 @@ self.addEventListener("notificationclick", event => {
   }
 });
 
-function notify(t,b,actions = []){
-    self.registration.showNotification(t, {
-        body: b,
+//pop out a notification. Title and body are required. Actions are optional
+function notify(title,body,actions = []){
+    self.registration.showNotification(title, {
+        body: body,
         actions: actions
     });
 }
