@@ -27,7 +27,11 @@
     overflow: auto;
     top:100px;
     width: 100%;
-    height: calc(100%-200px);
+    height: calc(100% - 200px);
+}
+#peopleDisplay {
+    width: 100%;
+    overflow: auto;
 }
 
 .popup{
@@ -43,7 +47,7 @@
     background-color: #E9EDED;
     border: solid 3px #1F305E;
     border-radius: 5px;
-    visibility: hidden;
+    display: none;
 }
 
 #nav {
