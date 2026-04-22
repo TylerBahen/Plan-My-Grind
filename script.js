@@ -155,4 +155,10 @@ function load(){
   if (contactsSupported!=true){
     document.getElementById('contactsUploadBtn').style.display = 'none'
   }
+  if (Notification.permission!='granted'){
+    console.log('Asking for permission for notifications...')
+    Notification.requestPermission()
+  } else {
+    console.log('Notifications affirmative, we are clear for takeoff...')
+  }
 }
