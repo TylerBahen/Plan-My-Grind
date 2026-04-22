@@ -8,6 +8,7 @@
 * {
     margin: 0px;
     padding: 0px;
+    overscroll-behavior-y: contain;
 }
 
 #header {
@@ -18,7 +19,10 @@
     background-color: var(--primary);
     display: flex;
     align-items: center;
-    color: var(--light)
+    color: var(--light);
+}
+#header h1 {
+    margin-left: 10px;
 }
 
 .mainview {
