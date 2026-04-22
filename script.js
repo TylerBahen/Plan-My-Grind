@@ -109,7 +109,7 @@ function newPerson(){
     cn.value = ''
     ct.value = ''
     ce.value = ''
-    window.location.hash = 'People'
+    window.location.replace('#People')
     refreshcontacts()
   }
 }
@@ -128,7 +128,7 @@ async function uploadContacts(){
       people.push({'name':contact.name[0],'tel':numbers,'email':contact.email})
     })
     localStorage.setItem('contacts',JSON.stringify({'list':people}))
-    window.location.hash = 'People'
+    window.location.replace('#People')
     refreshcontacts()
   } catch (err) {
     window.alert(err);
