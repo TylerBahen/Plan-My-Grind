@@ -28,12 +28,23 @@
     top:100px;
     width: 100%;
     height: calc(100% - 200px);
+    background-color: var(--light);
 }
 #peopleDisplay {
     width: 100%;
     height: 100%;
     overflow: auto;
 }
+.person {
+    width: calc(100% - 50px);
+    margin: 10px;
+    padding: 10px;
+    border: solid 3px var(--secondary);
+    border-radius: 10px;
+    background-color: #ffffff;
+}
+
+
 .plusButton {
     position: absolute;
     bottom: 10px;

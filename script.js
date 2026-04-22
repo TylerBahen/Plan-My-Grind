@@ -74,7 +74,7 @@ function refreshcontacts(){
   }
   var display = ''
   contacts.forEach(contact => {
-    display+=`<div class="person"><h1>${contact.name}</h1>`
+    display+=`<div class="person"><p><b>${contact.name}</b></p>`
     if (contact.tel!=[]){
       contact.tel.forEach(number => {
         display+=`<p>${formatPhone(number)} : <a href="tel:${number}">Call</a> / <a href="sms:${number}">Text</a></p>`
@@ -85,6 +85,7 @@ function refreshcontacts(){
         display+=`<p>${address} : <a href="mailto:${address}">Email</a></p>`
       })
     }
+    display+='</div>'
   })
   document.getElementById('peopleDisplay').innerHTML = display
   people = contacts
