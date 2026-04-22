@@ -126,7 +126,7 @@ async function uploadContacts(){
       contact.tel.forEach(number => {
         numbers.push(toDigits(number))
       })
-      people.push({'name':contact.name[0],'tel':numbers,'email':contact.email})
+      people.push({'name':contact.name[0],'tel':[...new Set(numbers)],'email':[...new Set(contact.email)]})
     })
     localStorage.setItem('contacts',JSON.stringify({'list':people}))
     window.location.replace('#People')
