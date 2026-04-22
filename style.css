@@ -26,16 +26,19 @@
     position: absolute;
     overflow: auto;
     top:100px;
+    width: 100%;
     height: calc(100%-200px);
 }
 
 .popup{
     width: fit-content;
     height: fit-content;
+    max-height: 80%;
+    max-width: 90%;
     position: absolute;
     top: 50%;
     left: 50%;
-    padding: 100px;
+    padding: 20px;
     transform: translate(-50%, -50%);
     background-color: #E9EDED;
     border: solid 3px #1F305E;
