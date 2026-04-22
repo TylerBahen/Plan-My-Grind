@@ -3,15 +3,23 @@ self.addEventListener("activate", e => e.waitUntil(self.clients.claim()));
 
 self.addEventListener('message', m =>{
     const message = m.data
-    console.log('Message Recieved!')
     switch (message.action){
         case 'notify':
             notify(message.title,message.body)
     }
 })
 
-function notify(t,b){
+self.addEventListener("notificationclick", event => {
+    console.log('Heard the click')
+    const command = event.action.split(".")
+  if (command[0] === "complete") {
+    console.log('He done did it.')
+  }
+});
+
+function notify(t,b,actions = []){
     self.registration.showNotification(t, {
-        body: b
+        body: b,
+        actions: actions
     });
 }

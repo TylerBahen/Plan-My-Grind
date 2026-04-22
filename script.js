@@ -22,7 +22,7 @@ window.addEventListener('hashchange',() => {
     case 'Goals':
     case 'Planner':
     case 'People':
-    case 'Settings':
+    case 'Tasks':
       changeview(page)
       break
     case 'NewPerson':
@@ -34,7 +34,7 @@ window.addEventListener('hashchange',() => {
 //Window changing thingy
 function changeview(window){
   document.getElementById('title').innerHTML = window
-  const windows = ['Goals', 'Planner', 'Home', 'People', 'Settings']
+  const windows = ['Goals', 'Planner', 'Home', 'People', 'Tasks']
     windows.forEach((i) => {
         document.getElementById(i).style.visibility = 'hidden'
     })
@@ -70,7 +70,7 @@ function refreshcontacts(){
   if (contactsraw==null){
     contacts = []
   } else {
-    contacts = JSON.parse(contactsraw).list
+    contacts = JSON.parse(contactsraw)
   }
   var display = ''
   contacts.forEach(contact => {
@@ -106,7 +106,7 @@ function newPerson(){
       email = [ce.value]
     }
     people.push({'name':cn.value,'tel':tel,'email':email})
-    localStorage.setItem('contacts',JSON.stringify({'list':people}))
+    localStorage.setItem('contacts',JSON.stringify(people))
     cn.value = ''
     ct.value = ''
     ce.value = ''
@@ -128,8 +128,9 @@ async function uploadContacts(){
       })
       people.push({'name':contact.name[0],'tel':[...new Set(numbers)],'email':[...new Set(contact.email)]})
     })
-    localStorage.setItem('contacts',JSON.stringify({'list':people}))
+    localStorage.setItem('contacts',JSON.stringify(people))
     window.location.replace('#People')
+    emit('notify',{'title':"Plan My Grind",'body':'Contacts Succesfully Uploaded'})
     refreshcontacts()
   } catch (err) {
     window.alert(err);
