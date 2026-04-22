@@ -8,6 +8,7 @@
 * {
     margin: 0px;
     padding: 0px;
+    overscroll-behavior-y: contain;
 }
 
 #header {
@@ -45,6 +46,7 @@
     border: solid 3px var(--secondary);
     border-radius: 10px;
     background-color: #ffffff;
+    overflow: auto;
 }
 
 
