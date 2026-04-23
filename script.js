@@ -26,6 +26,7 @@ window.addEventListener('hashchange',() => {
       changeview(page)
       break
     case 'NewPerson':
+    case 'NewTask':
       openpopup(page)
       break
   }
@@ -52,7 +53,7 @@ function emit(action,messageRaw){
 
 //Close any popup windows
 function closepopups(){
-  const popups = ['NewPerson']
+  const popups = ['NewPerson','NewTask']
   popups.forEach((popup) => {
     document.getElementById(popup).style.visibility = 'hidden'
   })
@@ -154,6 +155,43 @@ function formatPhone(digits) {
   return d.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
 }
 
+//Ask the service worker for the tasks and load them up
+function refreshtasks(){
+  var tasksRaw = localStorage.getItem('tasks')
+  if (tasksRaw==null){
+    tasksRaw = []
+  } else {
+    tasksRaw = JSON.parse(tasksRaw)
+  }
+  tasks = []
+  var display = ''
+  tasksRaw.forEach(task => {
+    //TODO: Pull task from service worker db, update completion status
+    display+=`<div class="task"><p><b>${task.title}</b></p><p>${task.body}</p></div>`
+    tasks.push(task)
+  })
+  document.getElementById('taskDisplay').innerHTML = display
+}
+
+var tasks = []
+//Take form stuff and create task
+function newTask(){
+  const tt = document.getElementById('taskTitle')
+  const tb = document.getElementById('taskBody')
+  if (tt.value!='' && tb.value!=''){
+    const newTask = {'title':tt.value,'body':tb.value,'completed':0,'date':new Date(),'id':crypto.randomUUID()}
+    tt.value = ''
+    tb.value = ''
+    tasks.push(newTask)
+    emit('notify',newTask)
+    window.location.replace('#Tasks')
+    //post tasks to service worker .then(()=>{
+    //emit('tasksupdate',{'storeTasks':tasks})
+    localStorage.setItem('tasks',JSON.stringify(tasks))
+    refreshtasks()
+  }
+}
+
 //Onload function
 function load(){
   window.location.hash = ''
@@ -177,4 +215,5 @@ function load(){
     console.log('Notifications affirmative')
   }
   refreshcontacts()
+  refreshtasks()
 }

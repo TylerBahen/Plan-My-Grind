@@ -4,7 +4,7 @@
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="style.css">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="shortcut icon" href="images/192x.png" type="image/x-icon">
     <title>Plan My Grind</title>
 </head>
@@ -14,7 +14,7 @@
     </div>
 
     <div id="Home" class="mainview">
-        0.2.8
+        0.3.0
     </div>
     <div id="Goals" class="mainview">
     </div>
@@ -25,6 +25,8 @@
     <div id="Planner" class="mainview">
     </div>
     <div id="Tasks" class="mainview">
+        <a href="#NewTask"><button class="plusButton">+</button></a>
+        <div id="taskDisplay"></div>
     </div>
 
     <div id="nav">
@@ -52,6 +54,12 @@
         <p>Email Address: <input type="text" id="contactEmail"></p>
         <button onclick="newPerson()">Create Contact</button>
         <button id="contactsUploadBtn" onclick="uploadContacts()">Upload Contacts From Your Device</button>
+    </div>
+    <div class="popup" id="NewTask">
+        <h1>Add Task</h1>
+        <p>Title: <input type="text" id="taskTitle"></p>
+        <p>Description <input type="text" id="taskBody"></p>
+        <button onclick="newTask()">Create Task</button>
     </div>
     <script src="script.js"></script>
 </body>
