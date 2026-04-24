@@ -7,21 +7,69 @@ self.addEventListener('message', m =>{
         case 'notify':
             notify(message.title,message.body)
             break
-        case 'storeTasks':
-            message.tasks.forEach(task => {
-                kvSet(task.id,task)
+        case 'taskset':
+            notify(message.title,message.body,[{action:`completetask.${message.id}`,title:'Complete Task'}])
+            kvSet(message.id,message.completed)
+            kvGet('idBucket').then(ids => {
+                if(ids==null){
+                    kvSet('idBucket',[message.id])
+                } else {
+                    let newlist = ids
+                    newlist.push(message.id)
+                    kvSet('idBucket',newlist)
+                }
             })
             break
-        case 'pullTask':
+        case 'taskquery':
+            console.log('Tasks Requested')
+            kvGet('idBucket').then(ids => {
+                if (ids==null){
+                    kvSet('idBucket',[])
+                } else {
+                    let checks = []
+                    let completes = []
+                    Promise.all(
+                        ids.map(id =>
+                            kvGet(id).then(c => {
+                                if (c == 1) {
+                                    return kvDelete(id).then(() => {
+                                        completes.push(id)
+                                    })
+                                } else {
+                                    checks.push(id)
+                                }
+                            })
+                        )
+                    ).then(() => {
+                        kvSet('idBucket', checks)
+                        m.source.postMessage({ action: "taskcomplete", ids: completes })
+                        m.source.postMessage({ action: "taskcheck", ids: checks })
+                    })
+                }
+            })
+            break
+        case 'taskdump':
+            let dumplist = []
+            message.ids.forEach(id => {
+                kvDelete(message.id)
+                dumplist.push(id)
+            })
+            kvGet('idBucket').then(ids => {
+                let newlist = [...ids]
+                dumplist.forEach(id => {
+                    newlist.splice(newlist.indexOf(id),1)
+                })
+                kvSet('idBucket',newlist)
+            })
             break
     }
 })
 
 self.addEventListener("notificationclick", event => {
-    console.log('Heard the click')
     const command = event.action.split(".")
   if (command[0] === "completetask") {
-    console.log('He done did it.')
+    kvSet(command[1],1)
+    notify('Plan My Grind','Task marked as completed!')
   }
 });
 

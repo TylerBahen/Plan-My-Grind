@@ -43,7 +43,7 @@ function changeview(window){
 }
 
 //Emit to the service worker
-function emit(action,messageRaw){
+function emit(action,messageRaw = {}){
   const message = messageRaw
   message.action = action
     navigator.serviceWorker.ready.then(reg => {
@@ -138,7 +138,7 @@ async function uploadContacts(){
     })
     localStorage.setItem('contacts',JSON.stringify(people))
     window.location.replace('#People')
-    emit('notify',{'title':"Plan My Grind",'body':'Contacts Succesfully Uploaded'})
+    //emit('notify',{'title':"Plan My Grind",'body':'Contacts Succesfully Uploaded'})
     refreshcontacts()
   } catch (err) {
     window.alert(err);
@@ -156,7 +156,7 @@ function formatPhone(digits) {
 }
 
 //Ask the service worker for the tasks and load them up
-function refreshtasks(){
+async function refreshtasks(){
   var tasksRaw = localStorage.getItem('tasks')
   if (tasksRaw==null){
     tasksRaw = []
@@ -164,13 +164,29 @@ function refreshtasks(){
     tasksRaw = JSON.parse(tasksRaw)
   }
   tasks = []
-  var display = ''
+  var incompleteDisplay = ''
+  var completeDisplay = ''
   tasksRaw.forEach(task => {
     //TODO: Pull task from service worker db, update completion status
-    display+=`<div class="task"><p><b>${task.title}</b></p><p>${task.body}</p></div>`
+    const display = `<div class="task"><p><b>${task.title}</b></p><p>${task.body}</p>`
+    if (task.completed==0){
+      incompleteDisplay+=display+`<button onclick="markComplete('${task.id}')">Mark Complete</button></div>`
+    } else {
+      completeDisplay+=display+"</div>"
+    }
     tasks.push(task)
   })
-  document.getElementById('taskDisplay').innerHTML = display
+  var fullDisplay = ''
+  if (incompleteDisplay!=''){
+    fullDisplay+=`<h1>Pending Tasks</h1>${incompleteDisplay}`
+  }
+  if (completeDisplay!=''){
+    fullDisplay+=`<h1>Completed Tasks</h1><del>${completeDisplay}</del>`
+  }
+  if (incompleteDisplay=='' && completeDisplay==''){
+    fullDisplay+=`<h1>Pending Tasks</h1><div class="task"><p><b>It's empty here...</b></p><p>Press the '+' button to create a task!</p></div>`
+  }
+  document.getElementById('taskDisplay').innerHTML = fullDisplay
 }
 
 var tasks = []
@@ -183,13 +199,21 @@ function newTask(){
     tt.value = ''
     tb.value = ''
     tasks.push(newTask)
-    emit('notify',newTask)
+    emit('taskset',newTask)
     window.location.replace('#Tasks')
-    //post tasks to service worker .then(()=>{
-    //emit('tasksupdate',{'storeTasks':tasks})
-    localStorage.setItem('tasks',JSON.stringify(tasks))
-    refreshtasks()
+    saveTasks()
   }
+}
+
+function markComplete(id){
+  const i = tasks.findIndex(o => o.id == id)
+  tasks[i].completed = 1
+  saveTasks()
+}
+
+function saveTasks(){
+  localStorage.setItem('tasks',JSON.stringify(tasks))
+  refreshtasks()
 }
 
 //Onload function
@@ -216,4 +240,23 @@ function load(){
   }
   refreshcontacts()
   refreshtasks()
+  emit('taskquery')
 }
+
+navigator.serviceWorker.addEventListener("message", (event) => {
+  const message = event.data
+  console.log("Simon says:", message);
+  switch (message.action){
+    case 'taskcomplete':
+      message.ids.forEach(id => {
+        markComplete(id)
+      })
+      break
+    case 'taskcheck':
+      let dumplist = []
+      message.ids.forEach(id => {
+        dumplist.push(id)
+      })
+      emit('taskdump',{ids:dumplist})
+  }
+});

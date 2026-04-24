@@ -55,6 +55,9 @@
     overflow-y: auto;
     overflow-x: hidden;
 }
+#taskDisplay h1 {
+    margin:10px;
+}
 .task {
     width: calc(100% - 45px);
     margin: 10px;
