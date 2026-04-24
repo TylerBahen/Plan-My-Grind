@@ -68,8 +68,13 @@ self.addEventListener('message', m =>{
 self.addEventListener("notificationclick", event => {
     const command = event.action.split(".")
   if (command[0] === "completetask") {
-    kvSet(command[1],1)
-    notify('Plan My Grind','Task marked as completed!')
+    event.waitUntil(
+        Promise.all([
+            kvSet(command[1],1),
+            event.notification.close(),
+            notify('Plan My Grind','Task marked as completed!'),
+        ])
+    )
   }
 });
 
