@@ -170,9 +170,9 @@ async function refreshtasks(){
     //TODO: Pull task from service worker db, update completion status
     const display = `<div class="task"><p><b>${task.title}</b></p><p>${task.body}</p>`
     if (task.completed==0){
-      incompleteDisplay+=display+`<button onclick="markComplete('${task.id}')">Mark Complete</button></div>`
+      incompleteDisplay+=display+`<button class="completeTask" onclick="markComplete('${task.id}')">Mark Complete</button></div>`
     } else {
-      completeDisplay+=display+"</div>"
+      completeDisplay+=display+`<button class="removeTask" onclick="forgetTask('${task.id}')">Remove From Completed</button></div>`
     }
     tasks.push(task)
   })
@@ -205,12 +205,24 @@ function newTask(){
   }
 }
 
+/*
+function taskBump(id){
+  const task = tasks.find(o => o.id == id)
+  emit('taskset',task)
+}
+*/
+
+//Task Handlers
 function markComplete(id){
   const i = tasks.findIndex(o => o.id == id)
   tasks[i].completed = 1
   saveTasks()
 }
-
+function forgetTask(id){
+  const i = tasks.findIndex(o => o.id == id)
+  tasks.splice(i,1)
+  saveTasks()
+}
 function saveTasks(){
   localStorage.setItem('tasks',JSON.stringify(tasks))
   refreshtasks()
@@ -218,8 +230,13 @@ function saveTasks(){
 
 //Onload function
 function load(){
+  const startHash = window.location.hash
   window.location.hash = ''
-  window.location.hash = 'Home'
+  if (startHash==''){
+    window.location.hash = 'Home'
+  } else {
+    window.location.hash = startHash
+  }
   if (contactsSupported!=true){
     document.getElementById('contactsUploadBtn').style.display = 'none'
     console.log('Contacts negative')
@@ -255,7 +272,10 @@ navigator.serviceWorker.addEventListener("message", (event) => {
     case 'taskcheck':
       let dumplist = []
       message.ids.forEach(id => {
-        dumplist.push(id)
+        const match = tasks.find(o => o.id == id)
+        if (match == undefined || match.completed == 1){
+          dumplist.push(id)
+        }
       })
       emit('taskdump',{ids:dumplist})
   }

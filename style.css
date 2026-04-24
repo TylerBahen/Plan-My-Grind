@@ -66,6 +66,22 @@
     border-radius: 10px;
     background-color: #ffffff;
 }
+.completeTask {
+    background-color: var(--primary);
+    border-color: var(--accent);
+    color: var(--light);
+    border-radius: 5px;
+    width: 100%;
+    margin-top: 5px;
+}
+.removeTask {
+    background-color: var(--light);
+    border-color: var(--accent);
+    color: var(--primary);
+    border-radius: 5px;
+    width: 100%;
+    margin-top: 5px;
+}
 
 
 .plusButton {

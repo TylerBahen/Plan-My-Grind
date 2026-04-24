@@ -8,7 +8,7 @@ self.addEventListener('message', m =>{
             notify(message.title,message.body)
             break
         case 'taskset':
-            notify(message.title,message.body,[{action:`completetask.${message.id}`,title:'Complete Task'}],message.id)
+            notify(message.title,message.body,[{action:`completetask.${message.id}`,title:'Mark As Complete'},{action:`nav./#Tasks`,title:'Open Task List'}],message.id)
             kvSet(message.id,message.completed)
             kvGet('idBucket').then(ids => {
                 if(ids==null){
@@ -16,12 +16,11 @@ self.addEventListener('message', m =>{
                 } else {
                     let newlist = ids
                     newlist.push(message.id)
-                    kvSet('idBucket',newlist)
+                    kvSet('idBucket',[...new Set(newlist)])
                 }
             })
             break
         case 'taskquery':
-            console.log('Tasks Requested')
             kvGet('idBucket').then(ids => {
                 if (ids==null){
                     kvSet('idBucket',[])
@@ -67,12 +66,32 @@ self.addEventListener('message', m =>{
 
 self.addEventListener("notificationclick", event => {
     const command = event.action.split(".")
-  if (command[0] === "completetask") {
-    event.waitUntil((async () => {
-        await kvSet(command[1],1)
-        notify('Plan My Grind','Task marked as completed!',[],command[1])
-    })());
-  }
+    switch (command[0]){
+        case "completetask":
+            event.waitUntil((async () => {
+                await kvSet(command[1],1)
+                notify('Plan My Grind','Task marked as completed!',[],command[1])
+            })());
+            break
+        case "nav":
+            const url = command[1]
+            event.waitUntil(
+              clients.matchAll({ type: "window", includeUncontrolled: true })
+                .then(clientList => {
+                  // If the page is already open, focus it
+                  for (const client of clientList) {
+                    if (client.url.includes(url) && "focus" in client) {
+                      return client.focus();
+                    }
+                  }
+                  // Otherwise open a new tab
+                  if (clients.openWindow) {
+                    return clients.openWindow(url);
+                  }
+                })
+            );
+            break
+    }
 });
 
 //pop out a notification. Title and body are required. Actions are optional
