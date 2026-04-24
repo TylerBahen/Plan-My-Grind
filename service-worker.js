@@ -8,7 +8,7 @@ self.addEventListener('message', m =>{
             notify(message.title,message.body)
             break
         case 'taskset':
-            notify(message.title,message.body,[{action:`completetask.${message.id}`,title:'Complete Task'}])
+            notify(message.title,message.body,[{action:`completetask.${message.id}`,title:'Complete Task'}],message.id)
             kvSet(message.id,message.completed)
             kvGet('idBucket').then(ids => {
                 if(ids==null){
@@ -68,21 +68,19 @@ self.addEventListener('message', m =>{
 self.addEventListener("notificationclick", event => {
     const command = event.action.split(".")
   if (command[0] === "completetask") {
-    event.waitUntil(
-        Promise.all([
-            kvSet(command[1],1),
-            event.notification.close(),
-            notify('Plan My Grind','Task marked as completed!'),
-        ])
-    )
+    event.waitUntil((async () => {
+        await kvSet(command[1],1)
+        notify('Plan My Grind','Task marked as completed!',[],command[1])
+    })());
   }
 });
 
 //pop out a notification. Title and body are required. Actions are optional
-function notify(title,body,actions = []){
+function notify(title,body,actions = [], tag = undefined){
     self.registration.showNotification(title, {
         body: body,
-        actions: actions
+        actions: actions,
+        tag: tag
     });
 }
 
