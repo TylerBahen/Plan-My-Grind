@@ -72,6 +72,7 @@ self.addEventListener("notificationclick", event => {
                 await kvSet(command[1],1)
                 notify('Plan My Grind','Task marked as completed!',[],command[1])
             })());
+            emit('refreshtasks')
             break
         /*case "nav":
             const url = ''
@@ -102,7 +103,19 @@ function notify(title,body,actions = [], tag = undefined){
         tag: tag
     });
 }
+//Emit to clients
+async function emit(action,messageRaw = {}){
+  const message = messageRaw
+  message.action = action
+  const allClients = await self.clients.matchAll({
+    type: "window",
+    includeUncontrolled: true
+  });
 
+  for (const client of allClients) {
+    client.postMessage(message);
+  }
+}
 
 
 

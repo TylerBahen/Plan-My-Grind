@@ -278,5 +278,9 @@ navigator.serviceWorker.addEventListener("message", (event) => {
         }
       })
       emit('taskdump',{ids:dumplist})
+      break
+    case 'refreshtasks':
+      emit('taskquery')
+      break
   }
 });
