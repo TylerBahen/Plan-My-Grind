@@ -8,7 +8,7 @@ self.addEventListener('message', m =>{
             notify(message.title,message.body)
             break
         case 'taskset':
-            notify(message.title,message.body,[{action:`completetask.${message.id}`,title:'Mark As Complete'},{action:`nav./#Tasks`,title:'Open Task List'}],message.id)
+            notify(message.title,message.body,[{action:`completetask.${message.id}`,title:'Mark As Complete'}],message.id)
             kvSet(message.id,message.completed)
             kvGet('idBucket').then(ids => {
                 if(ids==null){
@@ -73,8 +73,8 @@ self.addEventListener("notificationclick", event => {
                 notify('Plan My Grind','Task marked as completed!',[],command[1])
             })());
             break
-        case "nav":
-            const url = command[1]
+        /*case "nav":
+            const url = ''
             event.waitUntil(
               clients.matchAll({ type: "window", includeUncontrolled: true })
                 .then(clientList => {
@@ -90,7 +90,7 @@ self.addEventListener("notificationclick", event => {
                   }
                 })
             );
-            break
+            break*/
     }
 });
 
