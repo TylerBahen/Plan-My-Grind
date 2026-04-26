@@ -70,7 +70,8 @@ self.addEventListener("notificationclick", event => {
         case "completetask":
             event.waitUntil((async () => {
                 await kvSet(command[1],1)
-                notify('Plan My Grind','Task marked as completed!',[],command[1])
+                event.notification.close()
+                //notify('Plan My Grind','Task marked as completed!',[],command[1])
                 await emit('refreshtasks')
             })());
             break
@@ -95,7 +96,7 @@ self.addEventListener("notificationclick", event => {
     }
 });
 
-//pop out a notification. Title and body are required. Actions are optional
+//send out a notification. Title and body are required. Actions and tag are optional
 function notify(title,body,actions = [], tag = undefined){
     self.registration.showNotification(title, {
         body: body,
@@ -114,6 +115,7 @@ async function emit(action,messageRaw = {}){
   for (const client of allClients) {
     client.postMessage(message);
   }
+  //The return is just for the awaiting in the notification handler
   return allClients
 }
 

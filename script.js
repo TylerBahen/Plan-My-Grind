@@ -25,6 +25,7 @@ window.addEventListener('hashchange',() => {
     case 'Tasks':
       changeview(page)
       break
+    case 'Settings':
     case 'NewPerson':
     case 'NewTask':
       openpopup(page)
@@ -53,7 +54,7 @@ function emit(action,messageRaw = {}){
 
 //Close any popup windows
 function closepopups(){
-  const popups = ['NewPerson','NewTask']
+  const popups = ['Settings','NewPerson','NewTask']
   popups.forEach((popup) => {
     document.getElementById(popup).style.visibility = 'hidden'
   })
@@ -113,7 +114,12 @@ function newPerson(){
     if (ce.value!=''){
       email = [ce.value]
     }
-    people.push({'name':cn.value,'tel':tel,'email':email})
+    var cid = 1000+Math.floor(Math.random()*9000)
+      while (people.find(o => o.id == cid)!=undefined){
+        console.log('Prevented ID Collision')
+        cid = 1000+Math.floor(Math.random()*9000)
+    }
+    people.push({'name':cn.value,'tel':tel,'email':email,'id':cid})
     localStorage.setItem('contacts',JSON.stringify(people))
     cn.value = ''
     ct.value = ''
@@ -134,7 +140,12 @@ async function uploadContacts(){
       contact.tel.forEach(number => {
         numbers.push(toDigits(number))
       })
-      people.push({'name':contact.name[0],'tel':[...new Set(numbers)],'email':[...new Set(contact.email)]})
+      var cid = 1000+Math.floor(Math.random()*9000)
+      while (people.find(o => o.id == cid)!=undefined){
+        console.log('Prevented ID Collision')
+        cid = 1000+Math.floor(Math.random()*9000)
+      }
+      people.push({'name':contact.name[0],'tel':[...new Set(numbers)],'email':[...new Set(contact.email)],'id':cid})
     })
     localStorage.setItem('contacts',JSON.stringify(people))
     window.location.replace('#People')
@@ -205,12 +216,27 @@ function newTask(){
   }
 }
 
-/*
-function taskBump(id){
-  const task = tasks.find(o => o.id == id)
-  emit('taskset',task)
+function bumpTasks(){
+  if (Notification.permission!='granted'){
+    Notification.requestPermission().then(permission => {
+      if (permission == 'granted'){
+        tasks.forEach(task => {
+          if(task.completed==0){
+            emit('taskset',task)
+          }
+        })
+      } else if(permission == 'denied'){
+        alert("It looks like we don't have permission to display notifications on your device.")
+      }
+    })
+  } else {
+    tasks.forEach(task => {
+      if(task.completed==0){
+        emit('taskset',task)
+      }
+    })
+  }
 }
-*/
 
 //Task Handlers
 function markComplete(id){

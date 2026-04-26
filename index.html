@@ -26,6 +26,7 @@
     </div>
     <div id="Tasks" class="mainview">
         <a href="#NewTask"><button class="plusButton">+</button></a>
+        <button class="secondButton" onclick="bumpTasks()">⬆</button>
         <div id="taskDisplay"></div>
     </div>
 
@@ -47,6 +48,9 @@
         </a>
     </div>
     <div id="blanket" onclick="navBack()"></div>
+    <div class="popup" id="Settings">
+        <h1>Settings</h1>
+    </div>
     <div class="popup" id="NewPerson">
         <h1>Add Contact</h1>
         <p>Name: <input type="text" id="contactName"></p>
@@ -58,7 +62,7 @@
     <div class="popup" id="NewTask">
         <h1>Add Task</h1>
         <p>Title: <input type="text" id="taskTitle"></p>
-        <p>Description <input type="text" id="taskBody"></p>
+        <p>Description: <textarea type="text" id="taskBody"></textarea></p>
         <button onclick="newTask()">Create Task</button>
     </div>
     <script src="script.js"></script>
