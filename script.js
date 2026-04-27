@@ -262,9 +262,9 @@ function plannerNav(){
   }
 }
 
-function syncGoogleCalendar(){
+async function syncGoogleCalendar(){
   if(accessToken!=null){
-    listEvents()
+    const events = await listEvents()
   } else {
     googleSignIn()
   }
@@ -272,7 +272,7 @@ function syncGoogleCalendar(){
 
 async function listEvents() {
   const res = await fetch(
-    "https://www.googleapis.com/calendar/v3/calendars/primary/events?singleEvents=true&orderBy=startTime",
+    `https://www.googleapis.com/calendar/v3/calendars/primary/events?singleEvents=true&orderBy=startTime&timeMin=${encodeURIComponent(new Date().toISOString())}`,
     {
       headers: {
         Authorization: `Bearer ${accessToken}`
@@ -282,6 +282,7 @@ async function listEvents() {
 
   const data = await res.json();
   console.log("Events:", data.items);
+  return data
 }
 
 
