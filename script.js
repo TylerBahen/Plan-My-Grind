@@ -333,6 +333,7 @@ function googleSignIn(){
       const accessToken = response.access_token;
       console.log("Access token:", accessToken);
       document.getElementById('google-signin').remove()
+      googleLoggedIn = true
       localStorage.setItem('googleSignIn','true')
     }
   });
