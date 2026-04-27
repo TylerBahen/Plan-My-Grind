@@ -287,12 +287,13 @@ function load(){
   google.accounts.id.initialize({
   client_id: GOOGLE_CLIENT_ID,
   callback: (stuff) => {
+    document.getElementById('google-signin').remove()
     console.log(stuff)
   },
 });
   google.accounts.id.renderButton(
   document.getElementById("google-signin"),
-  { theme: "outline", size: "large" }
+  { theme: "outline", size: "large", type:"icon", shape:"circle"}
 );
 google.accounts.id.prompt();
 }
