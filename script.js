@@ -290,6 +290,7 @@ function load(){
     const user = parseJwt(response.credential)
     document.getElementById('google-signin').remove()
     document.getElementById('google-wrapper').innerHTML = `Signed In As ${user.name}`
+    console.log(user)
     const tokenClient = google.accounts.oauth2.initTokenClient({
       client_id: GOOGLE_CLIENT_ID,
       scope: "https://www.googleapis.com/auth/calendar",
