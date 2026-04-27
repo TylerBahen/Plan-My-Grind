@@ -254,6 +254,10 @@ function saveTasks(){
   refreshtasks()
 }
 
+
+
+
+
 //Onload function
 function load(){
   const startHash = window.location.hash
@@ -285,7 +289,7 @@ function load(){
   refreshtasks()
   emit('taskquery')
   if(localStorage.getItem('googleSignIn')=='true'){
-    googleSignIn()
+    setTimeout(googleSignIn,3000)
   }
 }
 
