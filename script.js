@@ -254,6 +254,14 @@ function saveTasks(){
   refreshtasks()
 }
 
+//Sync Google Calender the first time each session
+var googleLoggedIn = false
+function plannerNav(){
+  if(localStorage.getItem('googleSignIn')=='true' && googleLoggedIn==false){
+    googleSignIn()
+  }
+}
+
 
 
 
@@ -288,9 +296,7 @@ function load(){
   refreshcontacts()
   refreshtasks()
   emit('taskquery')
-  if(localStorage.getItem('googleSignIn')=='true'){
-    setTimeout(googleSignIn,3000)
-  }
+  
 }
 
 navigator.serviceWorker.addEventListener("message", (event) => {
