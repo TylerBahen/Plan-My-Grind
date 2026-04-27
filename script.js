@@ -270,7 +270,7 @@ async function syncGoogleCalendar(){
     googleEvents.forEach(event => {
       console.log(event.id)
     })
-    //document.getElementById('syncView').style.visibility = 'hidden'
+    document.getElementById('syncView').style.visibility = 'hidden'
   } else {
     googleSignIn()
   }
