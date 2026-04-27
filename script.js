@@ -263,13 +263,17 @@ function plannerNav(){
 }
 
 var events = {}
-var selectedDay = new Date().toISOString()
+var selectedDay = new Date().toISOString().substring(0,10)
 async function syncGoogleCalendar(){
   if(accessToken!=null){
     document.getElementById('syncWindow').style.visibility = 'visible'
     googleEvents = await listEvents()
     googleEvents.forEach(event => {
       console.log(event.id)
+      if(events[event.start.dateTime.substring(0,15)]==undefined){
+        events[event.start.dateTime.substring(0,15)] = []
+      }
+      events[event.start.dateTime.substring(0,15)].push(event)
     })
     document.getElementById('syncWindow').style.visibility = 'hidden'
   } else {
