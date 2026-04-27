@@ -322,7 +322,7 @@ function googleSignIn(){
       console.log("Access token:", accessToken);
     }
   });
-  tokenClient.requestAccessToken();
+  tokenClient.requestAccessToken({prompt:''});
 }
 function parseJwt(token) {
   const base64Url = token.split('.')[1];
