@@ -313,15 +313,15 @@ navigator.serviceWorker.addEventListener("message", (event) => {
 });
 
 const GOOGLE_CLIENT_ID = '618102630522-e17dbh57dr1lcoqof3dmj69e3ivilogp.apps.googleusercontent.com'
-const tokenClient = google.accounts.oauth2.initTokenClient({
-  client_id: GOOGLE_CLIENT_ID,
-  scope: "https://www.googleapis.com/auth/calendar",
-  callback: (response) => {
-    const accessToken = response.access_token;
-    console.log("Access token:", accessToken);
-  }
-});
 function googleSignIn(){
+  const tokenClient = google.accounts.oauth2.initTokenClient({
+    client_id: GOOGLE_CLIENT_ID,
+    scope: "https://www.googleapis.com/auth/calendar",
+    callback: (response) => {
+      const accessToken = response.access_token;
+      console.log("Access token:", accessToken);
+    }
+  });
   tokenClient.requestAccessToken();
 }
 function parseJwt(token) {
