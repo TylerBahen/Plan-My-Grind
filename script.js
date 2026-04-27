@@ -284,6 +284,17 @@ function load(){
   refreshcontacts()
   refreshtasks()
   emit('taskquery')
+  google.accounts.id.initialize({
+  client_id: GOOGLE_CLIENT_ID,
+  callback: (stuff) => {
+    console.log(stuff)
+  },
+});
+  google.accounts.id.renderButton(
+  document.getElementById("google-signin"),
+  { theme: "outline", size: "large" }
+);
+google.accounts.id.prompt();
 }
 
 navigator.serviceWorker.addEventListener("message", (event) => {
@@ -310,3 +321,5 @@ navigator.serviceWorker.addEventListener("message", (event) => {
       break
   }
 });
+
+const GOOGLE_CLIENT_ID = '618102630522-e17dbh57dr1lcoqof3dmj69e3ivilogp.apps.googleusercontent.com'
