@@ -262,6 +262,28 @@ function plannerNav(){
   }
 }
 
+function syncGoogleCalendar(){
+  if(accessToken!=null){
+    listEvents()
+  } else {
+    googleSignIn()
+  }
+}
+
+async function listEvents() {
+  const res = await fetch(
+    "https://www.googleapis.com/calendar/v3/calendars/primary/events?singleEvents=true&orderBy=startTime",
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    }
+  );
+
+  const data = await res.json();
+  console.log("Events:", data.items);
+}
+
 
 
 
@@ -325,15 +347,17 @@ navigator.serviceWorker.addEventListener("message", (event) => {
 });
 
 const GOOGLE_CLIENT_ID = '618102630522-e17dbh57dr1lcoqof3dmj69e3ivilogp.apps.googleusercontent.com'
+var accessToken = null
 function googleSignIn(){
   const tokenClient = google.accounts.oauth2.initTokenClient({
     client_id: GOOGLE_CLIENT_ID,
     scope: "https://www.googleapis.com/auth/calendar.events",
     callback: (response) => {
-      googleLoggedIn = true
-      const accessToken = response.access_token;
+      googleLoggedIn = true;
+      accessToken = response.access_token;
+      syncGoogleCalendar()
       console.log("Access token:", accessToken);
-      document.getElementById('google-signin').remove()
+      document.getElementById('google-wrapper').innerHTML = 'Signed In With Google!'
       localStorage.setItem('googleSignIn','true')
     }
   });
