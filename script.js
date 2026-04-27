@@ -265,12 +265,12 @@ function plannerNav(){
 var events = []
 async function syncGoogleCalendar(){
   if(accessToken!=null){
-    document.getElementById('syncView').style.visibility = 'visible'
+    document.getElementById('syncWindow').style.visibility = 'visible'
     googleEvents = await listEvents()
     googleEvents.forEach(event => {
       console.log(event.id)
     })
-    document.getElementById('syncView').style.visibility = 'hidden'
+    document.getElementById('syncWindow').style.visibility = 'hidden'
   } else {
     googleSignIn()
   }
