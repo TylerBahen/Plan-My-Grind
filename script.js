@@ -284,7 +284,9 @@ function load(){
   refreshcontacts()
   refreshtasks()
   emit('taskquery')
-  
+  if(localStorage.getItem('googleSignIn')=='true'){
+    googleSignIn()
+  }
 }
 
 navigator.serviceWorker.addEventListener("message", (event) => {
@@ -316,10 +318,12 @@ const GOOGLE_CLIENT_ID = '618102630522-e17dbh57dr1lcoqof3dmj69e3ivilogp.apps.goo
 function googleSignIn(){
   const tokenClient = google.accounts.oauth2.initTokenClient({
     client_id: GOOGLE_CLIENT_ID,
-    scope: "https://www.googleapis.com/auth/calendar",
+    scope: "https://www.googleapis.com/auth/calendar.events",
     callback: (response) => {
       const accessToken = response.access_token;
       console.log("Access token:", accessToken);
+      document.getElementById('google-signin').remove()
+      localStorage.setItem('googleSignIn','true')
     }
   });
   tokenClient.requestAccessToken({prompt:''});
