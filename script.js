@@ -284,29 +284,7 @@ function load(){
   refreshcontacts()
   refreshtasks()
   emit('taskquery')
-  google.accounts.id.initialize({
-  client_id: GOOGLE_CLIENT_ID,
-  callback: (response) => {
-    const user = parseJwt(response.credential)
-    document.getElementById('google-signin').remove()
-    document.getElementById('google-wrapper').innerHTML = `Signed In As ${user.name}`
-    console.log(user)
-    const tokenClient = google.accounts.oauth2.initTokenClient({
-      client_id: GOOGLE_CLIENT_ID,
-      scope: "https://www.googleapis.com/auth/calendar",
-      callback: (response) => {
-        const accessToken = response.access_token;
-        console.log("Access token:", accessToken);
-      }
-    });
-    tokenClient.requestAccessToken();
-  },
-});
-  google.accounts.id.renderButton(
-  document.getElementById("google-signin"),
-  { theme: "outline", size: "large", shape:'circle'}
-);
-google.accounts.id.prompt();
+  
 }
 
 navigator.serviceWorker.addEventListener("message", (event) => {
@@ -335,6 +313,17 @@ navigator.serviceWorker.addEventListener("message", (event) => {
 });
 
 const GOOGLE_CLIENT_ID = '618102630522-e17dbh57dr1lcoqof3dmj69e3ivilogp.apps.googleusercontent.com'
+const tokenClient = google.accounts.oauth2.initTokenClient({
+  client_id: GOOGLE_CLIENT_ID,
+  scope: "https://www.googleapis.com/auth/calendar",
+  callback: (response) => {
+    const accessToken = response.access_token;
+    console.log("Access token:", accessToken);
+  }
+});
+function googleSignIn(){
+  tokenClient.requestAccessToken();
+}
 function parseJwt(token) {
   const base64Url = token.split('.')[1];
   const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
