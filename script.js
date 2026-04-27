@@ -262,7 +262,8 @@ function plannerNav(){
   }
 }
 
-var events = []
+var events = {}
+var selectedDay = new Date().toISOString()
 async function syncGoogleCalendar(){
   if(accessToken!=null){
     document.getElementById('syncWindow').style.visibility = 'visible'
@@ -288,7 +289,7 @@ async function listEvents() {
 
   const data = await res.json();
   console.log("Events:", data.items);
-  return data
+  return data.items
 }
 
 
