@@ -286,14 +286,15 @@ function load(){
   emit('taskquery')
   google.accounts.id.initialize({
   client_id: GOOGLE_CLIENT_ID,
-  callback: (stuff) => {
+  callback: (response) => {
+    const user = parseJwt(response.credential)
     document.getElementById('google-signin').remove()
-    console.log(stuff)
+    document.getElementById('google-wrapper').innerHTML = 'Signed In!'
   },
 });
   google.accounts.id.renderButton(
   document.getElementById("google-signin"),
-  { theme: "outline", size: "large", type:"icon", shape:"circle"}
+  { theme: "outline", size: "large", shape:'circle'}
 );
 google.accounts.id.prompt();
 }
@@ -324,3 +325,8 @@ navigator.serviceWorker.addEventListener("message", (event) => {
 });
 
 const GOOGLE_CLIENT_ID = '618102630522-e17dbh57dr1lcoqof3dmj69e3ivilogp.apps.googleusercontent.com'
+function parseJwt(token) {
+  const base64Url = token.split('.')[1];
+  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  return JSON.parse(atob(base64));
+}
