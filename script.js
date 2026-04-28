@@ -412,7 +412,8 @@ function changeDay(dateStr){
 }
 
 async function listEvents() {
-  const date = new Date().setDate(new Date().getDate() - 1)
+  const date = new Date()
+  date.setDate(date.getDate() - 1)
   const res = await fetch(
     `https://www.googleapis.com/calendar/v3/calendars/primary/events?singleEvents=true&orderBy=startTime&timeMin=${encodeURIComponent(date.toISOString())}`,
     {
