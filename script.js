@@ -305,7 +305,7 @@ function refreshDay(){
 
 async function listEvents() {
   const res = await fetch(
-    `https://www.googleapis.com/calendar/v3/calendars/primary/events?singleEvents=true&orderBy=startTime&timeMin=${encodeURIComponent(new Date().toLocaleDateString("en-CA"))}`,
+    `https://www.googleapis.com/calendar/v3/calendars/primary/events?singleEvents=true&orderBy=startTime&timeMin=${encodeURIComponent(new Date().toISOString())}`,
     {
       headers: {
         Authorization: `Bearer ${accessToken}`
