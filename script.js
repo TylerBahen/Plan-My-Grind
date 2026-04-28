@@ -264,7 +264,7 @@ function plannerNav(){
 
 var events = {}
 var eventsRaw = []
-var selectedDay = new Date().toISOString().substring(0,10)
+var selectedDay = new Date().toLocaleDateString("en-CA")
 async function syncGoogleCalendar(){
   if(accessToken!=null){
     document.getElementById('syncWindow').style.visibility = 'visible'
@@ -300,12 +300,12 @@ function refreshDay(){
   events[selectedDay].forEach(event => {
     display+=`<div class="person"><h1>${event.summary}</h1></div>`
   })
-  view.innerHTML = display
+  view.innnerHTML = display
 }
 
 async function listEvents() {
   const res = await fetch(
-    `https://www.googleapis.com/calendar/v3/calendars/primary/events?singleEvents=true&orderBy=startTime&timeMin=${encodeURIComponent(new Date().toISOString())}`,
+    `https://www.googleapis.com/calendar/v3/calendars/primary/events?singleEvents=true&orderBy=startTime&timeMin=${encodeURIComponent(new Date().toLocaleDateString("en-CA"))}`,
     {
       headers: {
         Authorization: `Bearer ${accessToken}`
