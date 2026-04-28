@@ -295,14 +295,11 @@ async function syncGoogleCalendar(){
 }
 
 function refreshDay(){
-  console.log(selectedDay)
-  console.log(events[selectedDay])
   if (events[selectedDay]==undefined){
     events[selectedDay] = []
   }
   var display = ''
   events[selectedDay].forEach(event => {
-    console.log(event.summary)
     display+=`<div class="person"><h1>${event.summary}</h1></div>`
   })
   document.getElementById('dayDisplay').innerHTML = display
