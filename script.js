@@ -304,6 +304,14 @@ function refreshDay(){
   }
   let outdiv = document.getElementById("dayDisplay");
   outdiv.innerHTML = ''
+  if (selectedDay==today){
+      let bar = document.createElement('div')
+      bar.id = 'timeBar'
+      bar.style.position = 'absolute'
+      const pixels = minutesFromISO(new Date().toISOString())
+      bar.style.top = pixels+'px'
+      outdiv.appendChild(bar)
+    }
   var output = ''
   var i = 0
   events[selectedDay].forEach((event) => {
@@ -351,14 +359,6 @@ function refreshDay(){
     ctrldiv.innerHTML = '.'
     ctrldiv.style.top = "1440px";
     outdiv.appendChild(ctrldiv)
-    if (selectedDay==today){
-      let bar = document.createElement('div')
-      bar.id = 'timeBar'
-      bar.style.position = 'absolute'
-      const pixels = minutesFromISO(new Date().toISOString())
-      bar.style.top = pixels+'px'
-      outdiv.appendChild(bar)
-    }
 }
 function timeInit(){
   let bar = document.createElement('div')
