@@ -15,7 +15,7 @@
     </div>
 
     <div id="Home" class="mainview">
-        0.4.6.b
+        0.4.6.c
     </div>
     <div id="Goals" class="mainview">
     </div>
@@ -82,6 +82,14 @@
         <p>Title: <input type="text" id="taskTitle"></p>
         <p>Description: <textarea type="text" id="taskBody"></textarea></p>
         <button onclick="newTask()">Create Task</button>
+    </div>
+    <div class="popup" id="NewEvent">
+        <h1>Add Event</h1>
+        <p>Title: <input type="text" id="taskTitle"></p>
+        <p>Description: <textarea type="text" id="taskBody"></textarea></p>
+        <p>Start Time: <input type="datetime-local" name="startTime" id="startTime"></p>
+        <p>End Time: <input type="datetime-local" name="endTime" id="endTime"></p>
+        <button onclick="newEvent()">Create Event</button>
     </div>
     <div id="syncWindow"><h1>Syncing...</h1></div>
     <script src="script.js"></script>
