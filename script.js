@@ -35,7 +35,9 @@ window.addEventListener('hashchange',() => {
 
 //Window changing thingy
 function changeview(window){
-  document.getElementById('title').innerHTML = window
+  if (window!='Planner'){
+    document.getElementById('title').innerHTML = window
+  }
   const windows = ['Goals', 'Planner', 'Home', 'People', 'Tasks']
     windows.forEach((i) => {
         document.getElementById(i).style.visibility = 'hidden'
@@ -265,46 +267,6 @@ function plannerNav(){
 var events = {}
 var eventsRaw = []
 var selectedDay = formatDate(new Date())
-events[selectedDay] = [{
-    "kind": "calendar#event",
-    "etag": "\"3553169613731742\"",
-    "id": "cdi68c9kc4r68b9i6oq3cb9kcdhm4bb2cpj6cb9p64qjgc35c8rm2cpp70_20260428T161500Z",
-    "status": "confirmed",
-    "htmlLink": "https://www.google.com/calendar/event?eid=Y2RpNjhjOWtjNHI2OGI5aTZvcTNjYjlrY2RobTRiYjJjcGo2Y2I5cDY0cWpnYzM1YzhybTJjcHA3MF8yMDI2MDQyOFQxNjE1MDBaIHR5bGVyYmFoZW5AbQ",
-    "created": "2026-03-24T21:54:29.000Z",
-    "updated": "2026-04-19T07:46:46.865Z",
-    "summary": "WDD 131",
-    "description": "STC 231",
-    "location": "Science & Technology Center (STC), 510 S Center St, Rexburg, ID 83460, USA",
-    "colorId": "7",
-    "creator": {
-        "email": "tylerbahen@gmail.com",
-        "self": true
-    },
-    "organizer": {
-        "email": "tylerbahen@gmail.com",
-        "self": true
-    },
-    "start": {
-        "dateTime": "2026-04-28T10:15:00-06:00",
-        "timeZone": "America/Denver"
-    },
-    "end": {
-        "dateTime": "2026-04-28T11:15:00-06:00",
-        "timeZone": "America/Denver"
-    },
-    "recurringEventId": "cdi68c9kc4r68b9i6oq3cb9kcdhm4bb2cpj6cb9p64qjgc35c8rm2cpp70",
-    "originalStartTime": {
-        "dateTime": "2026-04-28T10:15:00-06:00",
-        "timeZone": "America/Denver"
-    },
-    "iCalUID": "cdi68c9kc4r68b9i6oq3cb9kcdhm4bb2cpj6cb9p64qjgc35c8rm2cpp70@google.com",
-    "sequence": 2,
-    "reminders": {
-        "useDefault": true
-    },
-    "eventType": "default"
-}]
 async function syncGoogleCalendar(){
   if(accessToken!=null){
     document.getElementById('syncWindow').style.visibility = 'visible'
@@ -480,6 +442,7 @@ function load(){
   }
   refreshcontacts()
   refreshtasks()
+  changeDay(selectedDay)
   emit('taskquery')
   
 }
