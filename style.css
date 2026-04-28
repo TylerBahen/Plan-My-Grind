@@ -76,7 +76,7 @@ html, body {
 #timeBar{
     height:2px;
     width: 100%;
-    background-color: var(--primary)
+    background-color: var(--secondary)
 }
 
 #p4 button {
