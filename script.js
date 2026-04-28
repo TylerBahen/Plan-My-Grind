@@ -28,6 +28,7 @@ window.addEventListener('hashchange',() => {
     case 'Settings':
     case 'NewPerson':
     case 'NewTask':
+    case 'NewEvent':
       openpopup(page)
       break
   }
@@ -58,7 +59,7 @@ function emit(action,messageRaw = {}){
 
 //Close any popup windows
 function closepopups(){
-  const popups = ['Settings','NewPerson','NewTask']
+  const popups = ['Settings','NewPerson','NewTask','NewEvent']
   popups.forEach((popup) => {
     document.getElementById(popup).style.visibility = 'hidden'
   })

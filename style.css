@@ -191,6 +191,17 @@ html, body {
     border-radius: 5px;
     visibility: hidden;
 }
+.popup input {
+    width: 100%;
+}
+.popup button {
+    background-color: var(--primary);
+    border-color: var(--accent);
+    color: var(--light);
+    border-radius: 5px;
+    width: 100%;
+    margin-top: 5px;
+}
 
 #nav {
     position: absolute;
