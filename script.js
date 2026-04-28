@@ -290,7 +290,6 @@ async function syncGoogleCalendar(){
         events[event.start.date].push(event)
       }
     })
-    console.log(events)
     refreshDay()
     document.getElementById('syncWindow').style.visibility = 'hidden'
   } else {
@@ -414,7 +413,7 @@ function changeDay(dateStr){
 
 async function listEvents() {
   const res = await fetch(
-    `https://www.googleapis.com/calendar/v3/calendars/primary/events?singleEvents=true&orderBy=startTime&timeMin=${encodeURIComponent(new Date().toISOString())}`,
+    `https://www.googleapis.com/calendar/v3/calendars/primary/events?singleEvents=true&orderBy=startTime&timeMin=${encodeURIComponent(new Date().setDate(d.getDate() - 1).toISOString())}`,
     {
       headers: {
         Authorization: `Bearer ${accessToken}`
@@ -434,7 +433,7 @@ async function listEvents() {
 function load(){
   const startHash = window.location.hash
   window.location.hash = ''
-  if (startHash==''){
+  if (startHash=='' || startHash=='Planner'){
     window.location.hash = 'Home'
   } else {
     window.location.hash = startHash
@@ -499,7 +498,6 @@ function googleSignIn(){
       googleLoggedIn = true;
       accessToken = response.access_token;
       syncGoogleCalendar()
-      console.log("Access token:", accessToken);
       document.getElementById('google-wrapper').innerHTML = 'Signed In With Google!'
       localStorage.setItem('googleSignIn','true')
     }
