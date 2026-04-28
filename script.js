@@ -413,7 +413,7 @@ function changeDay(dateStr){
 
 async function listEvents() {
   const res = await fetch(
-    `https://www.googleapis.com/calendar/v3/calendars/primary/events?singleEvents=true&orderBy=startTime&timeMin=${encodeURIComponent(new Date().setDate(d.getDate() - 1).toISOString())}`,
+    `https://www.googleapis.com/calendar/v3/calendars/primary/events?singleEvents=true&orderBy=startTime&timeMin=${encodeURIComponent(new Date().setDate(new Date.getDate() - 1).toISOString())}`,
     {
       headers: {
         Authorization: `Bearer ${accessToken}`
@@ -433,7 +433,7 @@ async function listEvents() {
 function load(){
   const startHash = window.location.hash
   window.location.hash = ''
-  if (startHash=='' || startHash=='Planner'){
+  if (startHash=='' || startHash=='#Planner'){
     window.location.hash = 'Home'
   } else {
     window.location.hash = startHash
