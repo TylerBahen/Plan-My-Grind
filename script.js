@@ -271,19 +271,81 @@ var events = {}
 var eventsRaw = []
 var selectedDay = formatDate(new Date())
 var today = formatDate(new Date())
+function newEvent(){
+  const et = document.getElementById('eventTitle')
+  const eb = document.getElementById('eventBody')
+  const ed = document.getElementById('date')
+  const es = document.getElementById('startTime')
+  const ee = document.getElementById('endTime')
+  if (et.value!='' && eb.value!='' && ed.value!=''){
+    const newEvent = {
+      'summary':et.value,
+      'description':eb.value,
+      'start':{'dateTime':toLocalISO(ed.value,es.value)},
+      'end':{'dateTime':toLocalISO(ed.value,ee.value)},
+      'id':crypto.randomUUID()+'@PlanMyGrind'
+    }
+    const newDate = formatDateFromISO(event.start.dateTime)
+    if (events[newDate]==undefined){
+      events[newDate] = []
+    }
+    events[newDate].push(newEvent)
+    eventsRaw[newEvent.id] = newDate
+    localStorage.setItem('events',JSON.stringify(events))
+    localStorage.setItem('eventsRaw',JSON.stringify(eventsRaw))
+    var descrepancies = localStorage.getItem('descrepancies')
+    if (descrepancies==undefined){
+      descrepancies = {'add':[],'edit':[],'delete':[]}
+    } else {
+      descrepancies = JSON.parse(descrepancies)
+    }
+    descrepancies.add.push(newEvent.id)
+    localStorage.setItem('descrepancies',JSON.stringify(descrepancies))
+    /*tt.value = ''
+    tb.value = ''
+    tasks.push(newTask)
+    emit('taskset',newTask)
+    window.location.replace('#Tasks')
+    saveTasks()*/
+  }
+}
+
 async function syncGoogleCalendar(){
   if(accessToken!=null){
     document.getElementById('syncWindow').style.visibility = 'visible'
+    var descrepancies = localStorage.getItem('descrepancies')
+    if (descrepancies==undefined){
+      descrepancies = {'add':[],'edit':[],'delete':[]}
+    } else {
+      descrepancies = JSON.parse(descrepancies)
+    }
+    eventsRaw = localStorage.getItem('eventsRaw')
+    if (eventsRaw==undefined){
+      eventsRaw = {}
+    } else {
+      eventsRaw = JSON.parse(eventsRaw)
+    }
+    events = localStorage.getItem('events')
+    if (events==undefined){
+      events = {}
+    } else {
+      events = JSON.parse(events)
+    }
+    descrepancies.add.forEach(addition => {
+      const eventDate = eventsRaw[addition]
+      console.log(events[eventDate])
+      //POST https://www.googleapis.com/calendar/v3/calendars/primary/events?eventId=UUID@PlanMyGrind
+    })
     googleEvents = await listEvents()
     events = {}
-    eventsRaw = []
+    eventsRaw = {}
     googleEvents.forEach(event => {
-      eventsRaw.push(event)
+      eventsRaw[event.id] = formatDateFromISO(event.start.dateTime)
       if(event.start.dateTime){
-        if(events[event.start.dateTime.slice(0,10)]==undefined){
-          events[event.start.dateTime.slice(0,10)] = []
+        if(events[formatDateFromISO(event.start.dateTime)]==undefined){
+          events[formatDateFromISO(event.start.dateTime)] = []
         }
-        events[event.start.dateTime.slice(0,10)].push(event)
+        events[formatDateFromISO(event.start.dateTime)].push(event)
       }
       if(event.start.date){
         if(events[event.start.date]==undefined){
@@ -298,6 +360,7 @@ async function syncGoogleCalendar(){
     googleSignIn()
   }
 }
+
 
 function refreshDay(){
   if (events[selectedDay]==undefined){
@@ -376,7 +439,29 @@ function timeInit(){
   });
 }
 
+
+//Date Handling Wrappers
+function toLocalISO(dateStr, timeStr) {
+  // Ensure time has seconds
+  if (timeStr.length === 5) timeStr += ":00";
+
+  // Build a combined local datetime string
+  const local = `${dateStr}T${timeStr}`;
+
+  // Create a Date object in LOCAL time
+  const d = new Date(local);
+
+  // Convert to full ISO string WITH timezone offset
+  return d.toISOString();
+}
 function formatDate(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+function formatDateFromISO(dateISO) {
+  const date = new Date(dateISO)
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
