@@ -303,6 +303,7 @@ function refreshDay(){
   var output = ''
   var i = 0
   events[selectedDay].forEach((event) => {
+    console.log(event)
         let eventDiv = document.createElement("div");
         //let position = calculatePosition(event.start, event.end, zoomLevel);
 
@@ -347,8 +348,8 @@ function minutesFromISO(iso) {
 }
 function calculatePosition(event) {
 
-    let startMinutes = timeToMinutes(event.start.dateTime);
-    let endMinutes = timeToMinutes(event.end.dateTime);
+    let startMinutes = minutesFromISO(event.start.dateTime);
+    let endMinutes = minutesFromISO(event.end.dateTime);
 
     let top = startMinutes// * (zoom/100);
     let height = (endMinutes - startMinutes)// * (zoom/100);
