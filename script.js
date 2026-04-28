@@ -295,7 +295,8 @@ async function syncGoogleCalendar(){
 }
 
 function refreshDay(){
-  console.log(events[refreshDay])
+  console.log(selectedDay)
+  console.log(events[selectedDay])
   if (events[selectedDay]==undefined){
     events[selectedDay] = []
   }
