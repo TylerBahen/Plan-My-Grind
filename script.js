@@ -336,7 +336,7 @@ function refreshDay(){
         `;
 
         outdiv.appendChild(eventDiv)
-        eventDiv.scrollIntoView()
+        //eventDiv.scrollIntoView()
       } else {
         console.log('All-Day Event Detected!')
         console.log(event)
@@ -413,7 +413,7 @@ function changeDay(dateStr){
 
 async function listEvents() {
   const date = new Date()
-  date.setDate(date.getDate() - 1)
+  date.setDate(date.getDate() - 7)
   const res = await fetch(
     `https://www.googleapis.com/calendar/v3/calendars/primary/events?singleEvents=true&orderBy=startTime&timeMin=${encodeURIComponent(date.toISOString())}`,
     {
