@@ -37,6 +37,8 @@ window.addEventListener('hashchange',() => {
 function changeview(window){
   if (window!='Planner'){
     document.getElementById('title').innerHTML = window
+  } else {
+    document.getElementById('title').innerHTML = selectedMonth
   }
   const windows = ['Goals', 'Planner', 'Home', 'People', 'Tasks']
     windows.forEach((i) => {
@@ -305,9 +307,8 @@ function refreshDay(){
   var output = ''
   var i = 0
   events[selectedDay].forEach((event) => {
-    console.log(event)
+    if(event.start.dateTime){
         let eventDiv = document.createElement("div");
-        //let position = calculatePosition(event.start, event.end, zoomLevel);
 
         eventDiv.className = "event-block";
         eventDiv.id = "event"+i
@@ -332,10 +333,15 @@ function refreshDay(){
 
         eventDiv.innerHTML = `<p>
             <strong>${event.summary}</strong></p>
+            <p>${minutesToHour(minutesFromISO(event.start.dateTime))} - ${minutesToHour(minutesFromISO(event.end.dateTime))}</p>
         `;
 
         outdiv.appendChild(eventDiv)
         eventDiv.scrollIntoView()
+      } else {
+        console.log('All-Day Event Detected!')
+        console.log(event)
+      }
     });
     let ctrldiv = document.createElement('div')
     ctrldiv.id = 'ctrl'
@@ -357,6 +363,16 @@ function minutesFromISO(iso) {
   const d = new Date(iso);
   return d.getHours() * 60 + d.getMinutes();
 }
+function minutesToHour(minutes) {
+  minutes = minutes % (24 * 60); // wrap around 24h
+  const h24 = Math.floor(minutes / 60);
+  const m = minutes % 60;
+
+  const suffix = h24 >= 12 ? "PM" : "AM";
+  const h12 = h24 % 12 || 12; // convert 0 → 12, 13 → 1, etc.
+
+  return `${h12}:${m.toString().padStart(2, "0")} ${suffix}`;
+}
 function calculatePosition(event) {
 
     let startMinutes = minutesFromISO(event.start.dateTime);
@@ -367,13 +383,14 @@ function calculatePosition(event) {
 
     return { top, height };
 }
+var selectedMonth = 'Planner'
 function changeDay(dateStr){
     selectedDay = dateStr
     refreshDay()
     let [y, m, d] = dateStr.split('-').map(Number);
     let date = new Date(y, m - 1, d);
-
-    document.getElementById('title').innerHTML = date.toLocaleString('default', { month: 'long' });
+    selectedMonth = date.toLocaleString('default', { month: 'long' });
+    document.getElementById('title').innerHTML = selectedMonth
 
     // Move back 3 days
     date.setDate(date.getDate() - 3);
