@@ -73,6 +73,11 @@ html, body {
     color:white;
     border-radius: 10px;
 }
+#timeBar{
+    height:2px;
+    width: 100%;
+    background-color: var(--accent)
+}
 
 #p4 button {
     background-color: var(--secondary);

@@ -269,6 +269,7 @@ function plannerNav(){
 var events = {}
 var eventsRaw = []
 var selectedDay = formatDate(new Date())
+var today = formatDate(new Date())
 async function syncGoogleCalendar(){
   if(accessToken!=null){
     document.getElementById('syncWindow').style.visibility = 'visible'
@@ -350,6 +351,28 @@ function refreshDay(){
     ctrldiv.innerHTML = '.'
     ctrldiv.style.top = "1440px";
     outdiv.appendChild(ctrldiv)
+    if (selectedDay==today){
+      let bar = document.createElement('div')
+      bar.id = 'timeBar'
+      bar.style.position = 'absolute'
+      const pixels = minutesFromISO(new Date().toISOString())
+      bar.style.top = pixels+'px'
+      outdiv.appendChild(bar)
+    }
+}
+function timeInit(){
+  let bar = document.createElement('div')
+  bar.id = 'timeBar'
+  bar.style.position = 'absolute'
+  const pixels = minutesFromISO(new Date().toISOString())
+  bar.style.top = pixels+'px'
+  const display = document.getElementById('dayDisplay')
+  display.appendChild(bar)
+  display.scrollTo(0, 0)
+  display.scrollBy({
+  top: pixels - display.clientHeight/2,
+  behavior: "smooth"
+  });
 }
 
 function formatDate(date) {
@@ -462,8 +485,10 @@ function load(){
   refreshtasks()
   changeDay(selectedDay)
   emit('taskquery')
-  
+  timeInit()
 }
+
+
 
 navigator.serviceWorker.addEventListener("message", (event) => {
   const message = event.data
@@ -489,7 +514,6 @@ navigator.serviceWorker.addEventListener("message", (event) => {
       break
   }
 });
-
 const GOOGLE_CLIENT_ID = '618102630522-e17dbh57dr1lcoqof3dmj69e3ivilogp.apps.googleusercontent.com'
 var accessToken = null
 function googleSignIn(){
