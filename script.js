@@ -278,7 +278,7 @@ async function syncGoogleCalendar(){
           events[event.start.dateTime.slice(0,10)] = []
         }
         events[event.start.dateTime.slice(0,10)].push(event)
-        }
+      }
       if(event.start.date){
         if(events[event.start.date]==undefined){
           events[event.start.date] = []
@@ -316,7 +316,7 @@ function refreshDay(){
 
         let pos = calculatePosition(event);
 
-        eventDiv.style.position = "absolute";
+        //eventDiv.style.position = "absolute";
         eventDiv.style.top = pos.top + "px";
         eventDiv.style.height = pos.height + "px";
         eventDiv.style.left = "20px";
