@@ -375,6 +375,14 @@ function refreshDay(){
         outdiv.appendChild(eventDiv)
         eventDiv.scrollIntoView()
     });
+    let ctrldiv = document.createElement('div')
+    ctrldiv.id = 'ctrl'
+    ctrldiv.style.position = "absolute";
+    ctrldiv.style.overflow = 'hidden'
+    ctrldiv.style.height = '1px'
+    ctrldiv.innerHTML = '.'
+    ctrldiv.style.top = "1440px";
+    outdiv.appendChild(ctrldiv)
 }
 
 function formatDate(date) {
