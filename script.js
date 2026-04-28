@@ -300,12 +300,12 @@ function refreshDay(){
   if (events[selectedDay]==undefined){
     events[selectedDay] = []
   }
-  const view = document.getElementById('dayDisplay')
   var display = ''
   events[selectedDay].forEach(event => {
+    console.log(event.summary)
     display+=`<div class="person"><h1>${event.summary}</h1></div>`
   })
-  view.innnerHTML = display
+  document.getElementById('dayDisplay').innerHTML = display
 }
 
 async function listEvents() {
