@@ -300,6 +300,7 @@ function refreshDay(){
   events[selectedDay].forEach(event => {
     display+=`<div class="person"><h1>${event.summary}</h1></div>`
   })
+  view.innerHTML = display
 }
 
 async function listEvents() {
