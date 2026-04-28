@@ -405,6 +405,33 @@ function calculatePosition(event) {
 
     return { top, height };
 }
+function changeDay(dateStr){
+    selectedDay = dateStr
+    refreshDay()
+    let [y, m, d] = dateStr.split('-').map(Number);
+    let date = new Date(y, m - 1, d);
+
+    document.getElementById('title').innerHTML = date.toLocaleString('default', { month: 'long' });
+
+    // Move back 3 days
+    date.setDate(date.getDate() - 3);
+
+    for (let i = 1; i <= 7; i++) {
+        // Format normalized date
+        const yyyy = date.getFullYear();
+        const mm = String(date.getMonth() + 1).padStart(2, '0');
+        const dd = String(date.getDate()).padStart(2, '0');
+        const normalized = `${yyyy}-${mm}-${dd}`;
+
+        // Render button
+        document.getElementById(`p${i}`).innerHTML =
+            `<button onclick="changeDay('${normalized}')">${dd}</button>`;
+
+        // Move to next day (auto-normalizes)
+        date.setDate(date.getDate() + 1);
+    }
+
+}
 
 async function listEvents() {
   const res = await fetch(

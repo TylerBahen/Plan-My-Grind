@@ -46,12 +46,32 @@ html, body {
 }
 #dayDisplay {
     width: 100%;
-    height: 100%;
+    height: calc(100% - 20px);
+    top: 20px;
     overflow: auto;
     position: absolute;
 }
 .event-block {
     overscroll-behavior: auto;
+}
+.datepicker{
+    display: flex;
+    height: 20px;
+}
+
+.datepicker div {
+    width: 100%;
+    height: 100%;
+}
+
+.datepicker button {
+    width: 100%;
+    height: 100%;
+    background-color: #E9EDED;
+}
+
+#p4 button {
+    background-color: #C8CBCC;
 }
 #peopleDisplay {
     width: 100%;
