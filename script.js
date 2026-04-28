@@ -270,10 +270,15 @@ async function syncGoogleCalendar(){
     googleEvents = await listEvents()
     googleEvents.forEach(event => {
       console.log(event.id)
+      try{
       if(events[event.start.dateTime.substring(0,15)]==undefined){
         events[event.start.dateTime.substring(0,15)] = []
       }
       events[event.start.dateTime.substring(0,15)].push(event)
+      } catch (e){
+        console.log(e)
+        console.log(event)
+      }
     })
     document.getElementById('syncWindow').style.visibility = 'hidden'
   } else {
