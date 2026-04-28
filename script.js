@@ -285,7 +285,7 @@ function newEvent(){
       'end':{'dateTime':toLocalISO(ed.value,ee.value)},
       'id':crypto.randomUUID()+'@PlanMyGrind'
     }
-    const newDate = formatDateFromISO(event.start.dateTime)
+    const newDate = formatDateFromISO(newEvent.start.dateTime)
     if (events[newDate]==undefined){
       events[newDate] = []
     }
