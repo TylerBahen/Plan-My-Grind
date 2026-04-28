@@ -269,6 +269,8 @@ async function syncGoogleCalendar(){
   if(accessToken!=null){
     document.getElementById('syncWindow').style.visibility = 'visible'
     googleEvents = await listEvents()
+    events = {}
+    eventsRaw = []
     googleEvents.forEach(event => {
       eventsRaw.push(event)
       if(event.start.dateTime){
@@ -284,10 +286,20 @@ async function syncGoogleCalendar(){
         events[event.start.date].push(event)
       }
     })
+    console.log(events)
+    refreshDay()
     document.getElementById('syncWindow').style.visibility = 'hidden'
   } else {
     googleSignIn()
   }
+}
+
+function refreshDay(){
+  const view = document.getElementById('dayDisplay')
+  var display = ''
+  events[selectedDay].forEach(event => {
+    display+=`<div class="person"><h1>${event.summary}</h1></div>`
+  })
 }
 
 async function listEvents() {
@@ -301,7 +313,6 @@ async function listEvents() {
   );
 
   const data = await res.json();
-  console.log("Events:", data.items);
   return data.items
 }
 
