@@ -299,10 +299,10 @@ function refreshDay(){
     events[selectedDay] = []
   }
   let outdiv = document.getElementById("dayDisplay");
-    outdiv.innerHTML = ''
-    var output = ''
-    var i = 0
-    events.forEach((event) => {
+  outdiv.innerHTML = ''
+  var output = ''
+  var i = 0
+  events[selectedDay].forEach((event) => {
         let eventDiv = document.createElement("div");
         //let position = calculatePosition(event.start, event.end, zoomLevel);
 
