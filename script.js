@@ -263,13 +263,14 @@ function plannerNav(){
 }
 
 var events = {}
+var eventsRaw = []
 var selectedDay = new Date().toISOString().substring(0,10)
 async function syncGoogleCalendar(){
   if(accessToken!=null){
     document.getElementById('syncWindow').style.visibility = 'visible'
     googleEvents = await listEvents()
     googleEvents.forEach(event => {
-      console.log(event.id)
+      eventsRaw.push(event)
       if(event.start.dateTime){
         if(events[event.start.dateTime.slice(0,10)]==undefined){
           events[event.start.dateTime.slice(0,10)] = []
