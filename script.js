@@ -349,9 +349,9 @@ function refreshDay(){
 
         eventDiv.className = "event-block";
         eventDiv.id = "event"+i
-        eventDiv.addEventListener('click', ((index) => {
+        /*eventDiv.addEventListener('click', ((index) => {
             return () => modEvent(index)
-        })(i));
+        })(i));*/
         i++
 
         let pos = calculatePosition(event);
@@ -362,11 +362,11 @@ function refreshDay(){
         eventDiv.style.left = "10px";
         eventDiv.style.width = "calc(100% - 20px)";
         eventDiv.style.backgroundColor = '#FFFFFF'
-        eventDiv.style.borderColor = '#001C55'
+        eventDiv.style.border = 'solid 3px #1F305E'
         eventDiv.style.overflow = 'hidden'
         eventDiv.style.boxSizing = 'border-box'
         eventDiv.style.padding = '5px'
-        eventDiv.style.borderRadius = '5px'
+        eventDiv.style.borderRadius = '10px'
 
         eventDiv.innerHTML = `<p>
             <strong>${event.summary}</strong></p>

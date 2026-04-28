@@ -5,6 +5,10 @@
     --light: #E9EDED;
 }
 
+html, body {
+    height: 100%;
+}
+
 * {
     margin: 0px;
     padding: 0px;
@@ -43,9 +47,11 @@
 #dayDisplay {
     width: 100%;
     height: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
-    position: relative;
+    overflow: auto;
+    position: absolute;
+}
+.event-block {
+    overscroll-behavior: auto;
 }
 #peopleDisplay {
     width: 100%;
