@@ -264,7 +264,7 @@ function plannerNav(){
 
 var events = {}
 var eventsRaw = []
-var selectedDay = new Date().toLocaleDateString("en-CA")
+var selectedDay = formatDate(new Date())
 async function syncGoogleCalendar(){
   if(accessToken!=null){
     document.getElementById('syncWindow').style.visibility = 'visible'
@@ -298,11 +298,62 @@ function refreshDay(){
   if (events[selectedDay]==undefined){
     events[selectedDay] = []
   }
-  var display = ''
-  events[selectedDay].forEach(event => {
-    display+=`<div class="person"><h1>${event.summary}</h1></div>`
-  })
-  document.getElementById('dayDisplay').innerHTML = display
+  let outdiv = document.getElementById("dayDisplay");
+    outdiv.innerHTML = ''
+    var output = ''
+    var i = 0
+    events.forEach((event) => {
+        let eventDiv = document.createElement("div");
+        //let position = calculatePosition(event.start, event.end, zoomLevel);
+
+        eventDiv.className = "event-block";
+        eventDiv.id = "event"+i
+        eventDiv.addEventListener('click', ((index) => {
+            return () => modEvent(index)
+        })(i));
+        i++
+
+        let pos = calculatePosition(event);
+
+        eventDiv.style.position = "absolute";
+        eventDiv.style.top = pos.top + "px";
+        eventDiv.style.height = pos.height + "px";
+        eventDiv.style.left = "20px";
+        eventDiv.style.width = "calc(100% - 40px)";
+        eventDiv.style.backgroundColor = '#386280'
+        eventDiv.style.overflow = 'hidden'
+        eventDiv.style.boxSizing = 'border-box'
+        eventDiv.style.padding = '5px'
+        eventDiv.style.borderRadius = '5px'
+
+        eventDiv.innerHTML = `<p>
+            <strong>${event.summary}</strong></p>
+        `;
+
+        outdiv.appendChild(eventDiv)
+        eventDiv.scrollIntoView()
+    });
+}
+
+function formatDate(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+function minutesFromISO(iso) {
+  const d = new Date(iso);
+  return d.getHours() * 60 + d.getMinutes();
+}
+function calculatePosition(event) {
+
+    let startMinutes = timeToMinutes(event.start.dateTime);
+    let endMinutes = timeToMinutes(event.end.dateTime);
+
+    let top = startMinutes// * (zoom/100);
+    let height = (endMinutes - startMinutes)// * (zoom/100);
+
+    return { top, height };
 }
 
 async function listEvents() {
