@@ -307,6 +307,7 @@ function newEvent(){
     es.value = ''
     ee.value = ''
     window.location.replace('#Planner')
+    refreshDay()
     if(googleLoggedIn){
       syncGoogleCalendar()
     }
