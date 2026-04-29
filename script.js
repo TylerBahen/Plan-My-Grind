@@ -331,6 +331,7 @@ async function syncGoogleCalendar(){
     } else {
       events = JSON.parse(events)
     }
+    //Additions
     for (const addition of discrepancies.add) {
       console.log(events)
       console.log(eventsRaw)
@@ -348,6 +349,10 @@ async function syncGoogleCalendar(){
       console.log(res)
       console.log(event)
     }
+    //Edits
+    //Deletions
+    discrepancies = {'add':[],'edit':[],'delete':[]}
+    localStorage.setItem('discrepancies',JSON.stringify(discrepancies))
     googleEvents = await listEvents()
     events = {}
     eventsRaw = {}
