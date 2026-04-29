@@ -283,7 +283,7 @@ function newEvent(){
       'description':eb.value,
       'start':{'dateTime':toLocalISO(ed.value,es.value)},
       'end':{'dateTime':toLocalISO(ed.value,ee.value)},
-      'id':crypto.randomUUID()+'@PlanMyGrind'
+      'id':crypto.randomUUID()+'@PlanGrind'
     }
     const newDate = formatDateFromISO(newEvent.start.dateTime)
     if (events[newDate]==undefined){
@@ -334,7 +334,6 @@ async function syncGoogleCalendar(){
     for (const addition of descrepancies.add) {
       const eventDate = eventsRaw[addition]
       const event = events[eventDate].find(o => o.id == addition)
-      //POST https://www.googleapis.com/calendar/v3/calendars/primary/events?eventId=UUID@PlanMyGrind
       const res = await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events`, {
         method: "POST",
         headers: {
@@ -344,6 +343,7 @@ async function syncGoogleCalendar(){
         body: JSON.stringify(event)
       });
       console.log(res)
+      console.log(event)
     }
     googleEvents = await listEvents()
     events = {}
