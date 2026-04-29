@@ -283,7 +283,7 @@ function newEvent(){
       'description':eb.value,
       'start':{'dateTime':toLocalISO(ed.value,es.value)},
       'end':{'dateTime':toLocalISO(ed.value,ee.value)},
-      'id':crypto.randomUUID()+'@PlanGrind'
+      'id':crypto.randomUUID().replace(/-/g, '')+'PlanGrind'
     }
     const newDate = formatDateFromISO(newEvent.start.dateTime)
     if (events[newDate]==undefined){
