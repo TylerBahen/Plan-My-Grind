@@ -370,6 +370,8 @@ async function syncGoogleCalendar(){
         events[event.start.date].push(event)
       }
     })
+    localStorage.setItem('eventsRaw',JSON.stringify(eventsRaw))
+    localStorage.setItem('events',JSON.stringify(events))
     refreshDay()
     document.getElementById('syncWindow').style.visibility = 'hidden'
   } else {
