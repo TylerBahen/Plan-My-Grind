@@ -335,7 +335,7 @@ async function syncGoogleCalendar(){
       const eventDate = eventsRaw[addition]
       const event = events[eventDate].find(o => o.id == addition)
       //POST https://www.googleapis.com/calendar/v3/calendars/primary/events?eventId=UUID@PlanMyGrind
-      const res = await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events?eventId=${encodeURIComponent(event.id)}`, {
+      const res = await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json" ,
