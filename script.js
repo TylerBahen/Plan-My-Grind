@@ -333,7 +333,7 @@ async function syncGoogleCalendar(){
     }
     descrepancies.add.forEach(addition => {
       const eventDate = eventsRaw[addition]
-      console.log(events[eventDate])
+      console.log(events[eventDate].find(o => o.id == addition))
       //POST https://www.googleapis.com/calendar/v3/calendars/primary/events?eventId=UUID@PlanMyGrind
     })
     googleEvents = await listEvents()
