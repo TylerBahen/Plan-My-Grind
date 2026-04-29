@@ -425,7 +425,6 @@ function refreshDay(){
         `;
 
         outdiv.appendChild(eventDiv)
-        //eventDiv.scrollIntoView()
       } else {
         console.log('All-Day Event Detected!')
         console.log(event)
@@ -441,18 +440,6 @@ function refreshDay(){
     outdiv.appendChild(ctrldiv)
 }
 function dayInit(){
-  let bar = document.createElement('div')
-  bar.id = 'timeBar'
-  bar.style.position = 'absolute'
-  const pixels = minutesFromISO(new Date().toISOString())
-  bar.style.top = pixels+'px'
-  const display = document.getElementById('dayDisplay')
-  display.appendChild(bar)
-  display.scrollTo(0, 0)
-  display.scrollBy({
-  top: pixels - display.clientHeight/2,
-  behavior: "smooth"
-  });
   eventsRaw = localStorage.getItem('eventsRaw')
   if (eventsRaw==undefined){
     eventsRaw = {}
@@ -465,7 +452,35 @@ function dayInit(){
   } else {
     events = JSON.parse(events)
   }
+  let ctrldiv = document.createElement('div')
+  ctrldiv.id = 'ctrl'
+  ctrldiv.style.position = "absolute";
+  ctrldiv.style.overflow = 'hidden'
+  ctrldiv.style.height = '1px'
+  ctrldiv.innerHTML = '.'
+  ctrldiv.style.top = "1440px";
+  let bar = document.createElement('div')
+  bar.id = 'timeBar'
+  bar.style.position = 'absolute'
+  const pixels = minutesFromISO(new Date().toISOString())
+  bar.style.top = pixels+'px'
+  const display = document.getElementById('dayDisplay')
+  const scroll = Math.round(pixels-(display.clientHeight/4))
+  display.appendChild(ctrldiv)
+  display.appendChild(bar)
+  display.scrollTo(0, 0)
+  display.scrollBy({
+  top: scroll,
+  behavior: "smooth"
+  });
   changeDay(today)
+  setTimeout(barTick,60000)
+}
+function barTick(){
+  const bar = document.getElementById('timeBar')
+  const minutes = minutesFromISO(new Date().toISOString())
+  bar.style.top = minutes+'px'
+  setTimeout(barTick,60000)
 }
 
 
