@@ -337,9 +337,6 @@ async function syncGoogleCalendar(){
     }
     //Additions
     for (const addition of discrepancies.add) {
-      console.log(events)
-      console.log(eventsRaw)
-      console.log(addition)
       const eventDate = eventsRaw[addition]
       const event = events[eventDate].find(o => o.id == addition)
       const res = await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events`, {
@@ -350,8 +347,6 @@ async function syncGoogleCalendar(){
         },
         body: JSON.stringify(event)
       });
-      console.log(res)
-      console.log(event)
     }
     //Edits
     //Deletions
@@ -445,7 +440,7 @@ function refreshDay(){
     ctrldiv.style.top = "1440px";
     outdiv.appendChild(ctrldiv)
 }
-function timeInit(){
+function dayInit(){
   let bar = document.createElement('div')
   bar.id = 'timeBar'
   bar.style.position = 'absolute'
@@ -458,6 +453,19 @@ function timeInit(){
   top: pixels - display.clientHeight/2,
   behavior: "smooth"
   });
+  eventsRaw = localStorage.getItem('eventsRaw')
+  if (eventsRaw==undefined){
+    eventsRaw = {}
+  } else {
+    eventsRaw = JSON.parse(eventsRaw)
+  }
+  events = localStorage.getItem('events')
+  if (events==undefined){
+    events = {}
+  } else {
+    events = JSON.parse(events)
+  }
+  changeDay(today)
 }
 
 
@@ -590,9 +598,8 @@ function load(){
   }
   refreshcontacts()
   refreshtasks()
-  changeDay(selectedDay)
+  dayInit()
   emit('taskquery')
-  timeInit()
 }
 
 
@@ -636,9 +643,4 @@ function googleSignIn(){
     }
   });
   tokenClient.requestAccessToken({prompt:''});
-}
-function parseJwt(token) {
-  const base64Url = token.split('.')[1];
-  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-  return JSON.parse(atob(base64));
 }
