@@ -301,12 +301,15 @@ function newEvent(){
     }
     discrepancies.add.push(newEvent.id)
     localStorage.setItem('discrepancies',JSON.stringify(discrepancies))
-    /*tt.value = ''
-    tb.value = ''
-    tasks.push(newTask)
-    emit('taskset',newTask)
-    window.location.replace('#Tasks')
-    saveTasks()*/
+    et.value = ''
+    eb.value = ''
+    ed.value = ''
+    es.value = ''
+    ee.value = ''
+    window.location.replace('#Planner')
+    if(googleLoggedIn){
+      syncGoogleCalendar()
+    }
   }
 }
 
