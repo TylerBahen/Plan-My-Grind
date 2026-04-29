@@ -338,7 +338,7 @@ async function syncGoogleCalendar(){
       const res = await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events?eventId=${encodeURIComponent(event.id)}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        "Authorization": `Bearer ${accessToken}`,
+        Authorization: `Bearer ${accessToken}`,
         body: JSON.stringify(event)
       });
       console.log(res)
