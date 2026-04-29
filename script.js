@@ -331,7 +331,7 @@ async function syncGoogleCalendar(){
     } else {
       events = JSON.parse(events)
     }
-    descrepancies.add.forEach(addition => {
+    for (const addition of discrepancies.add) {
       const eventDate = eventsRaw[addition]
       const event = events[eventDate].find(o => o.id == addition)
       //POST https://www.googleapis.com/calendar/v3/calendars/primary/events?eventId=UUID@PlanMyGrind
@@ -341,7 +341,7 @@ async function syncGoogleCalendar(){
         body: JSON.stringify(event)
       });
       console.log(res)
-    })
+    }
     googleEvents = await listEvents()
     events = {}
     eventsRaw = {}
