@@ -268,7 +268,7 @@ function plannerNav(){
 }
 
 var events = {}
-var eventsRaw = []
+var eventsRaw = {}
 var selectedDay = formatDate(new Date())
 var today = formatDate(new Date())
 function newEvent(){
@@ -293,14 +293,14 @@ function newEvent(){
     eventsRaw[newEvent.id] = newDate
     localStorage.setItem('events',JSON.stringify(events))
     localStorage.setItem('eventsRaw',JSON.stringify(eventsRaw))
-    var descrepancies = localStorage.getItem('descrepancies')
-    if (descrepancies==undefined){
-      descrepancies = {'add':[],'edit':[],'delete':[]}
+    var discrepancies = localStorage.getItem('discrepancies')
+    if (discrepancies==undefined){
+      discrepancies = {'add':[],'edit':[],'delete':[]}
     } else {
-      descrepancies = JSON.parse(descrepancies)
+      discrepancies = JSON.parse(discrepancies)
     }
-    descrepancies.add.push(newEvent.id)
-    localStorage.setItem('descrepancies',JSON.stringify(descrepancies))
+    discrepancies.add.push(newEvent.id)
+    localStorage.setItem('discrepancies',JSON.stringify(discrepancies))
     /*tt.value = ''
     tb.value = ''
     tasks.push(newTask)
@@ -313,11 +313,11 @@ function newEvent(){
 async function syncGoogleCalendar(){
   if(accessToken!=null){
     document.getElementById('syncWindow').style.visibility = 'visible'
-    var descrepancies = localStorage.getItem('descrepancies')
-    if (descrepancies==undefined){
-      descrepancies = {'add':[],'edit':[],'delete':[]}
+    var discrepancies = localStorage.getItem('discrepancies')
+    if (discrepancies==undefined){
+      discrepancies = {'add':[],'edit':[],'delete':[]}
     } else {
-      descrepancies = JSON.parse(descrepancies)
+      discrepancies = JSON.parse(discrepancies)
     }
     eventsRaw = localStorage.getItem('eventsRaw')
     if (eventsRaw==undefined){
@@ -331,7 +331,10 @@ async function syncGoogleCalendar(){
     } else {
       events = JSON.parse(events)
     }
-    for (const addition of descrepancies.add) {
+    for (const addition of discrepancies.add) {
+      console.log(events)
+      console.log(eventsRaw)
+      console.log(addition)
       const eventDate = eventsRaw[addition]
       const event = events[eventDate].find(o => o.id == addition)
       const res = await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events`, {
