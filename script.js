@@ -477,9 +477,11 @@ function dayInit(){
   setTimeout(barTick,60000)
 }
 function barTick(){
-  const bar = document.getElementById('timeBar')
-  const minutes = minutesFromISO(new Date().toISOString())
-  bar.style.top = minutes+'px'
+  if (selectedDay==today){
+    const bar = document.getElementById('timeBar')
+    const minutes = minutesFromISO(new Date().toISOString())
+    bar.style.top = minutes+'px'
+  }
   setTimeout(barTick,60000)
 }
 
@@ -541,7 +543,7 @@ function changeDay(dateStr){
     refreshDay()
     let [y, m, d] = dateStr.split('-').map(Number);
     let date = new Date(y, m - 1, d);
-    selectedMonth = date.toLocaleString('default', { month: 'long' });
+    selectedMonth = date.toLocaleString('default', {weekday: 'short', month: 'long', day: 'numeric'});
     document.getElementById('title').innerHTML = selectedMonth
 
     // Move back 3 days
