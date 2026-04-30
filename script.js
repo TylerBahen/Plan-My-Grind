@@ -680,7 +680,7 @@ const restraint = 100;  // max vertical movement allowed
 const allowedTime = 300; // max time allowed to travel that distance
 let startTime = 0;
 
-const surface = document.getElementById('dayDisplay');
+const surface = document.getElementById('Planner');
 
 surface.addEventListener('touchstart', e => {
   const t = e.changedTouches[0];
@@ -705,9 +705,9 @@ surface.addEventListener('touchend', e => {
 
   if (isHorizontal && isFastEnough && isLongEnough) {
     if (distX < 0) {
-      document.getElementById('p5').click()     // swipe left → next day
+      document.getElementById('p5').querySelector('button').click()     // swipe left → next day
     } else {
-      document.getElementById('p3').click()     // swipe right → previous day
+      document.getElementById('p3').querySelector('button').click()     // swipe right → previous day
     }
   }
 });
