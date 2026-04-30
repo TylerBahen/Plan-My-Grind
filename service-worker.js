@@ -20,6 +20,13 @@ self.addEventListener('message', m =>{
                 }
             })
             break
+        case 'taskclear':
+            self.registration.getNotifications({tag:message.id}).then(notifications => {
+                notifications.forEach(notification => {
+                    notification.close()
+                })
+            })
+            break
         case 'taskquery':
             kvGet('idBucket').then(ids => {
                 if (ids==null){

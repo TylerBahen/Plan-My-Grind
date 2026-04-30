@@ -244,9 +244,12 @@ function bumpTasks(){
 }
 
 //Task Handlers
-function markComplete(id){
+function markComplete(id,fromButton = true){
   const i = tasks.findIndex(o => o.id == id)
   tasks[i].completed = 1
+  if (fromButton){
+    emit('taskclear',{id:id})
+  }
   saveTasks()
 }
 function forgetTask(id){
@@ -629,7 +632,7 @@ navigator.serviceWorker.addEventListener("message", (event) => {
   switch (message.action){
     case 'taskcomplete':
       message.ids.forEach(id => {
-        markComplete(id)
+        markComplete(id,false)
       })
       break
     case 'taskcheck':
