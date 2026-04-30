@@ -702,6 +702,8 @@ surface.addEventListener('touchend', e => {
   const isFastEnough = elapsed <= allowedTime;
   const isLongEnough = Math.abs(distX) >= threshold;
 
+  alert(`Touch Ended\n${distX}, ${distY}\n${isHorizontal}, ${isFastEnough}, ${isLongEnough}`)
+
 
   if (isHorizontal && isFastEnough && isLongEnough) {
     if (distX < 0) {
