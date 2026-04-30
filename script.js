@@ -666,3 +666,48 @@ function googleSignIn(){
   });
   tokenClient.requestAccessToken({prompt:''});
 }
+
+
+
+//AI generated wrapper for swipe navigation on planner
+let touchStartX = 0;
+let touchStartY = 0;
+let touchEndX = 0;
+let touchEndY = 0;
+
+const threshold = 50;   // min px to count as swipe
+const restraint = 100;  // max vertical movement allowed
+const allowedTime = 300; // max time allowed to travel that distance
+let startTime = 0;
+
+const surface = document.getElementById('dayDisplay');
+
+surface.addEventListener('touchstart', e => {
+  const t = e.changedTouches[0];
+  touchStartX = t.pageX;
+  touchStartY = t.pageY;
+  startTime = Date.now();
+});
+
+surface.addEventListener('touchend', e => {
+  const t = e.changedTouches[0];
+  touchEndX = t.pageX;
+  touchEndY = t.pageY;
+
+  const distX = touchEndX - touchStartX;
+  const distY = touchEndY - touchStartY;
+  const elapsed = Date.now() - startTime;
+
+  const isHorizontal = Math.abs(distY) <= restraint;
+  const isFastEnough = elapsed <= allowedTime;
+  const isLongEnough = Math.abs(distX) >= threshold;
+
+
+  if (isHorizontal && isFastEnough && isLongEnough) {
+    if (distX < 0) {
+      document.getElementById('p5').click()     // swipe left → next day
+    } else {
+      document.getElementById('p3').click()     // swipe right → previous day
+    }
+  }
+});
