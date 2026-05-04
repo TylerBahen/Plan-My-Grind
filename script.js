@@ -318,13 +318,6 @@ function newEvent(){
   }
 }
 
-function viewEvent(id){
-  const event = events[selectedDay].find(o => o.id = id)
-  document.querySelector('#EventView h1').innerHTML = event.summary
-  document.querySelector('#EventView p').innerHTML = event.description
-  window.location.hash = 'EventView'
-}
-
 async function syncGoogleCalendar(){
   if(accessToken!=null){
     document.getElementById('syncWindow').style.visibility = 'visible'
@@ -406,17 +399,16 @@ function refreshDay(){
       outdiv.appendChild(bar)
     }
   var output = ''
-  var i = 0
-  events[selectedDay].forEach((event) => {
+  events[selectedDay].forEach((event,i) => {
     if(event.start.dateTime){
         let eventDiv = document.createElement("div");
 
         eventDiv.className = "event-block";
         eventDiv.id = "event"+i
-        eventDiv.addEventListener('click', ((index) => {
-            return () => viewEvent(event.id)
-        })(i));
-        i++
+        const currentId = event.id;
+        eventDiv.addEventListener("click", () => {
+            viewEvent(currentId);
+        });
 
         let pos = calculatePosition(event);
 
@@ -452,6 +444,15 @@ function refreshDay(){
     ctrldiv.style.top = "1440px";
     outdiv.appendChild(ctrldiv)
 }
+function viewEvent(id){
+  const event = events[selectedDay].find(o => o.id == id)
+  document.querySelector('#EventView h1').innerHTML = event.summary
+  document.querySelector('#EventView p').innerHTML = event.description
+  window.location.hash = 'EventView'
+}
+
+
+
 function dayInit(){
   eventsRaw = localStorage.getItem('eventsRaw')
   if (eventsRaw==undefined){
@@ -603,10 +604,15 @@ async function listEvents() {
 function load(){
   const startHash = window.location.hash
   window.location.hash = ''
-  if (startHash=='' || startHash=='#Planner'){
-    window.location.hash = 'Home'
-  } else {
-    window.location.hash = startHash
+  switch (startHash){
+    case '#Goals':
+    case '#People':
+    case '#Tasks':
+      window.location.hash = startHash
+      break
+    default:
+      window.location.hash = '#Home'
+      break
   }
   if (contactsSupported!=true){
     document.getElementById('contactsUploadBtn').style.display = 'none'
