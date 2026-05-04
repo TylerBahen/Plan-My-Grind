@@ -29,6 +29,7 @@ window.addEventListener('hashchange',() => {
     case 'NewPerson':
     case 'NewTask':
     case 'NewEvent':
+    case 'EventView':
       openpopup(page)
       break
   }
@@ -59,7 +60,7 @@ function emit(action,messageRaw = {}){
 
 //Close any popup windows
 function closepopups(){
-  const popups = ['Settings','NewPerson','NewTask','NewEvent']
+  const popups = ['Settings','NewPerson','NewTask','NewEvent','EventView']
   popups.forEach((popup) => {
     document.getElementById(popup).style.visibility = 'hidden'
   })
@@ -317,6 +318,13 @@ function newEvent(){
   }
 }
 
+function viewEvent(id){
+  const event = events[selectedDay].find(o => o.id = id)
+  document.querySelector('#EventView h1').innerHTML = event.summary
+  document.querySelector('#EventView p').innerHTML = event.description
+  window.location.hash = 'EventView'
+}
+
 async function syncGoogleCalendar(){
   if(accessToken!=null){
     document.getElementById('syncWindow').style.visibility = 'visible'
@@ -405,9 +413,9 @@ function refreshDay(){
 
         eventDiv.className = "event-block";
         eventDiv.id = "event"+i
-        /*eventDiv.addEventListener('click', ((index) => {
-            return () => modEvent(index)
-        })(i));*/
+        eventDiv.addEventListener('click', ((index) => {
+            return () => viewEvent(event.id)
+        })(i));
         i++
 
         let pos = calculatePosition(event);
@@ -669,7 +677,7 @@ function googleSignIn(){
 
 
 
-//AI generated wrapper for swipe navigation on planner
+//Vibe-coded wrapper for swipe navigation on planner
 let touchStartX = 0;
 let touchStartY = 0;
 let touchEndX = 0;
