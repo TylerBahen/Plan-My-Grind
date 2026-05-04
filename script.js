@@ -447,7 +447,14 @@ function refreshDay(){
 function viewEvent(id){
   const event = events[selectedDay].find(o => o.id == id)
   document.querySelector('#EventView h1').innerHTML = event.summary
-  document.querySelector('#EventView p').innerHTML = event.description
+  var desc = `<strong>${minutesToHour(minutesFromISO(event.start.dateTime))} - ${minutesToHour(minutesFromISO(event.end.dateTime))}</strong>`
+  if (event.description){
+     desc+=`<br>${event.description}`
+  }
+  if (event.location){
+    desc+=`<br>${event.location}`
+  }
+  document.querySelector('#EventView p').innerHTML = desc
   window.location.hash = 'EventView'
 }
 
