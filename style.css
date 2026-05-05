@@ -180,23 +180,33 @@ html, body {
     text-align: center;
 }
 .popup{
-    width: fit-content;
+    width: calc(100% - 100px);
     height: fit-content;
     max-height: 80%;
-    max-width: 90%;
+    max-width: 900px;
     position: absolute;
     top: 50%;
     left: 50%;
     padding: 20px;
     transform: translate(-50%, -50%);
-    background-color: #E9EDED;
-    border: solid 3px #1F305E;
+    background-color: var(--light);
+    border: solid 3px var(--secondary);
     border-radius: 5px;
     visibility: hidden;
 }
 .popup input {
     width: 100%;
+    box-sizing: border-box;
 }
+
+.popup textarea {
+    width: 100%;
+    height: 5em;
+    max-width: 100%;
+    min-width: 100%;
+    box-sizing: border-box;
+}
+
 .popup button {
     background-color: var(--primary);
     border-color: var(--accent);
