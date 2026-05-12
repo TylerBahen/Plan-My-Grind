@@ -14,12 +14,14 @@ html, body {
     padding: 0px;
     overscroll-behavior-y: contain;
 }
-/*
-#google-signin {
-    position: absolute;
-    right: 30px;
+
+::-webkit-scrollbar {
+    width: 0px;
 }
-*/
+
+
+
+
 #header {
     position: absolute;
     top: 0;

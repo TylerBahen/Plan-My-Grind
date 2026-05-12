@@ -28,8 +28,11 @@ window.addEventListener('hashchange',() => {
     case 'Settings':
     case 'NewPerson':
     case 'NewTask':
-    case 'NewEvent':
     case 'EventView':
+      openpopup(page)
+      break
+    case 'NewEvent':
+      document.getElementById('date').value = selectedDay
       openpopup(page)
       break
   }
