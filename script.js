@@ -29,6 +29,7 @@ window.addEventListener('hashchange',() => {
     case 'NewPerson':
     case 'NewTask':
     case 'EventView':
+    case 'PersonView':
       openpopup(page)
       break
     case 'NewEvent':
@@ -63,7 +64,7 @@ function emit(action,messageRaw = {}){
 
 //Close any popup windows
 function closepopups(){
-  const popups = ['Settings','NewPerson','NewTask','NewEvent','EventView']
+  const popups = ['Settings','NewPerson','NewTask','NewEvent','EventView','PersonView']
   popups.forEach((popup) => {
     document.getElementById(popup).style.visibility = 'hidden'
   })
@@ -92,8 +93,8 @@ function refreshcontacts(){
   }
   var display = ''
   contacts.forEach(contact => {
-    display+=`<div class="person"><p><b>${contact.name}</b></p>`
-    if (contact.tel!=[]){
+    display+=`<div class="person" onclick="viewPerson(${contact.id})"><p><b>${contact.name}</b></p>`
+    /*if (contact.tel!=[]){
       contact.tel.forEach(number => {
         display+=`<p>${formatPhone(number)} : <a href="tel:${number}">Call</a> / <a href="sms:${number}">Text</a></p>`
       })
@@ -102,11 +103,29 @@ function refreshcontacts(){
       contact.email.forEach(address => {
         display+=`<p>${address} : <a href="mailto:${address}">Email</a></p>`
       })
-    }
+    }*/
     display+='</div>'
   })
   document.getElementById('peopleDisplay').innerHTML = display
   people = contacts
+}
+
+function viewPerson(id){
+  const contact = people.find(o => o.id == id)
+  var display = ""
+  document.querySelector('#PersonView h1').innerHTML =contact.name
+  if (contact.tel!=[]){
+    contact.tel.forEach(number => {
+      display+=`<p>${formatPhone(number)} : <a href="tel:${number}">Call</a> / <a href="sms:${number}">Text</a></p>`
+    })
+  }
+  if (contact.email!=[]){
+    contact.email.forEach(address => {
+      display+=`<p>${address} : <a href="mailto:${address}">Email</a></p>`
+    })
+  }
+  document.querySelector('#PersonView p').innerHTML = display
+  window.location.hash = 'PersonView'
 }
 
 //Take form stuff and create contact
