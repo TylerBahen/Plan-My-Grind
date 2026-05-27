@@ -341,12 +341,19 @@ function newEvent(){
 }
 
 function deleteEvent(){
+  var discrepancies = localStorage.getItem('discrepancies')
+  if (discrepancies==undefined){
+    discrepancies = {'add':[],'edit':[],'delete':[]}
+  } else {
+    discrepancies = JSON.parse(discrepancies)
+  }
   if (discrepancies.add.includes(activeEvent.id)){
     //remove it
     alert('Remove Event from Add')
   } else {
     discrepancies.delete.push(activeEvent.id)
   }
+  localStorage.setItem('discrepancies',JSON.stringify(discrepancies))
   if(googleLoggedIn){
     syncGoogleCalendar()
   }
