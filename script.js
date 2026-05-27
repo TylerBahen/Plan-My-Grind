@@ -354,6 +354,8 @@ function deleteEvent(){
     discrepancies.delete.push(activeEvent.id)
   }
   localStorage.setItem('discrepancies',JSON.stringify(discrepancies))
+  window.location.replace('#Planner')
+  refreshDay()
   if(googleLoggedIn){
     syncGoogleCalendar()
   }
