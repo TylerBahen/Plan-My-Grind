@@ -341,6 +341,7 @@ function newEvent(){
 }
 
 function deleteEvent(){
+  if (confirm('Are you sure you want to delete this event?')){
   var discrepancies = localStorage.getItem('discrepancies')
   if (discrepancies==undefined){
     discrepancies = {'add':[],'edit':[],'delete':[]}
@@ -358,6 +359,7 @@ function deleteEvent(){
   refreshDay()
   if(googleLoggedIn){
     syncGoogleCalendar()
+  }
   }
 }
 
