@@ -349,10 +349,14 @@ function deleteEvent(){
     discrepancies = JSON.parse(discrepancies)
   }
   if (discrepancies.add.includes(activeEvent.id)){
-    //remove it
-    alert('Remove Event from Add')
+    discrepancies.add.splice(discrepancies.add.indexOf(activeEvent.id),1)
   } else {
     discrepancies.delete.push(activeEvent.id)
+  }
+  const eventDate = eventsRaw[activeEvent.id]
+  const index = events[eventDate].findIndex(o => o.id == activeEvent.id)
+  if (index!=-1){
+    events[eventDate].splice(index,1)
   }
   localStorage.setItem('discrepancies',JSON.stringify(discrepancies))
   window.location.replace('#Planner')
