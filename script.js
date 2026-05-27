@@ -340,6 +340,18 @@ function newEvent(){
   }
 }
 
+function deleteEvent(){
+  if (discrepancies.add.includes(activeEvent.id)){
+    //remove it
+    alert('Remove Event from Add')
+  } else {
+    discrepancies.delete.push(activeEvent.id)
+  }
+  if(googleLoggedIn){
+    syncGoogleCalendar()
+  }
+}
+
 async function syncGoogleCalendar(){
   if(accessToken!=null){
     document.getElementById('syncWindow').style.visibility = 'visible'
@@ -376,6 +388,16 @@ async function syncGoogleCalendar(){
     }
     //Edits
     //Deletions
+    for (const deletion of discrepancies.delete) {
+      //const eventDate = eventsRaw[addition]
+      //const event = events[eventDate].find(o => o.id == deletion)
+      const res = await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events/${deletion}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      });
+    }
     discrepancies = {'add':[],'edit':[],'delete':[]}
     localStorage.setItem('discrepancies',JSON.stringify(discrepancies))
     googleEvents = await listEvents()
@@ -466,8 +488,10 @@ function refreshDay(){
     ctrldiv.style.top = "1440px";
     outdiv.appendChild(ctrldiv)
 }
+var activeEvent = null
 function viewEvent(id){
   const event = events[selectedDay].find(o => o.id == id)
+  activeEvent = event
   document.querySelector('#EventView h1').innerHTML = event.summary
   var desc = `<strong>${minutesToHour(minutesFromISO(event.start.dateTime))} - ${minutesToHour(minutesFromISO(event.end.dateTime))}</strong>`
   if (event.description){
