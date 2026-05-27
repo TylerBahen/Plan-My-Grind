@@ -334,7 +334,7 @@ function newEvent(){
     ee.value = ''
     window.location.replace('#Planner')
     refreshDay()
-    if(googleLoggedIn){
+    if(googleLoggedIn && autoSyncCalendar){
       syncGoogleCalendar()
     }
   }
@@ -361,12 +361,17 @@ function deleteEvent(){
   localStorage.setItem('discrepancies',JSON.stringify(discrepancies))
   window.location.replace('#Planner')
   refreshDay()
-  if(googleLoggedIn){
+  if(googleLoggedIn && autoSyncCalendar){
     syncGoogleCalendar()
   }
   }
 }
 
+if (localStorage.getItem('autoSyncCalendar')=='false'){
+  var autoSyncCalendar = false
+} else {
+  var autoSyncCalendar = true
+}
 async function syncGoogleCalendar(){
   if(accessToken!=null){
     document.getElementById('syncWindow').style.visibility = 'visible'
