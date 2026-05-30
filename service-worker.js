@@ -57,7 +57,7 @@ self.addEventListener('message', m =>{
         case 'taskdump':
             let dumplist = []
             message.ids.forEach(id => {
-                kvDelete(message.id)
+                kvDelete(id)
                 dumplist.push(id)
             })
             kvGet('idBucket').then(ids => {
