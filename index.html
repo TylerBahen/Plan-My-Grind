@@ -15,9 +15,11 @@
     </div>
 
     <div id="Home" class="mainview">
-        0.5.15
+        0.5.16
     </div>
     <div id="Goals" class="mainview">
+        <a href="#NewGoal"><button class="plusButton">+</button></a>
+        <div id="goalDisplay"></div>
     </div>
     <div id="People" class="mainview">
         <a href="#NewPerson"><button class="plusButton">+</button></a>
@@ -91,6 +93,14 @@
         <p>Start Time: <input type="time" name="startTime" id="startTime"></p>
         <p>End Time: <input type="time" name="endTime" id="endTime"></p>
         <button onclick="newEvent()">Create Event</button>
+    </div>
+    <div class="popup" id="NewGoal">
+        <h1>Add Goal</h1>
+        <select name="goalType" id="goalType">
+            <option value="">--Select A Goal Type--</option>
+            <option value="Daily Habit">Daily Habit</option>
+        </select>
+        <div id="goalDiv"></div>
     </div>
     <div class="popup" id="EventView">
         <h1></h1>

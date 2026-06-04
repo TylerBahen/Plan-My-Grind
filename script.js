@@ -30,6 +30,7 @@ window.addEventListener('hashchange',() => {
     case 'NewTask':
     case 'EventView':
     case 'PersonView':
+    case 'NewGoal':
       openpopup(page)
       break
     case 'NewEvent':
@@ -64,7 +65,7 @@ function emit(action,messageRaw = {}){
 
 //Close any popup windows
 function closepopups(){
-  const popups = ['Settings','NewPerson','NewTask','NewEvent','EventView','PersonView']
+  const popups = ['Settings','NewPerson','NewTask','NewEvent','NewGoal','EventView','PersonView']
   popups.forEach((popup) => {
     document.getElementById(popup).style.visibility = 'hidden'
   })
@@ -233,7 +234,7 @@ var tasks = []
 function newTask(){
   const tt = document.getElementById('taskTitle')
   const tb = document.getElementById('taskBody')
-  if (tt.value!='' && tb.value!=''){
+  if (tt.value!=''){
     const newTask = {'title':tt.value,'body':tb.value,'completed':0,'date':new Date(),'id':crypto.randomUUID()}
     tt.value = ''
     tb.value = ''
@@ -303,7 +304,7 @@ function newEvent(){
   const ed = document.getElementById('date')
   const es = document.getElementById('startTime')
   const ee = document.getElementById('endTime')
-  if (et.value!='' && eb.value!='' && ed.value!=''){
+  if (et.value!='' && ed.value!=''){
     const newEvent = {
       'summary':et.value,
       'description':eb.value,
@@ -358,6 +359,7 @@ function deleteEvent(){
   if (index!=-1){
     events[eventDate].splice(index,1)
   }
+  localStorage.setItem('events',JSON.stringify(events))
   localStorage.setItem('discrepancies',JSON.stringify(discrepancies))
   window.location.replace('#Planner')
   refreshDay()
@@ -614,6 +616,13 @@ function minutesToHour(minutes) {
 
   return `${h12}:${m.toString().padStart(2, "0")} ${suffix}`;
 }
+function daysBetween(start, end){
+  const msPerDay = 1000 * 60 * 60 * 24
+  const a = new Date(start)
+  const b   = new Date(end)
+  return Math.round((b - a) / msPerDay)
+}
+
 function calculatePosition(event) {
 
     let startMinutes = minutesFromISO(event.start.dateTime);
@@ -670,6 +679,130 @@ async function listEvents() {
 }
 
 
+const goalSelect = document.getElementById('goalType')
+goalSelect.addEventListener('change', (e) => {
+  var goalHTML = ''
+  switch (goalSelect.value){
+    case '':
+      goalHTML = `
+      <p>Daily Habit - Useful for tracking things you want to do on a daily basis, such as accomplishing a daily goal or holding sobriety.</p>
+      `
+      break
+    case 'Daily Habit':
+      goalHTML = `
+      <p>Title:<br><input type="text" id="goalTitle"></p>
+      <button onclick="newGoal()">Create Goal</button>
+      `
+      break
+  }
+  document.getElementById('goalDiv').innerHTML = goalHTML
+})
+
+var goals = []
+function refreshGoals(){
+  const goalsraw = localStorage.getItem('goals')
+  if (goalsraw==null){
+    goals = []
+  } else {
+    goals = JSON.parse(goalsraw)
+  }
+  var output = ''
+  goals.forEach(goal => {
+    switch (goal.type){
+      case 'Daily Habit':
+        if (goal.today!=today){
+          var days = daysBetween(new Date(goal.today),new Date(today))
+          for (; days>=1; days--){
+            if (goal.days[goal.todayDex]==2){
+              goal.days[goal.todayDex] = 0
+            }
+            if (goal.todayDex<29){
+              goal.todayDex++
+            } else {
+              goal.days.push(2)
+              goal.days.shift()
+            }
+          }
+          goal.today = today
+        }
+        var calendarDiv = ''
+        var hits = 0
+        var sumTotal = 0
+        goal.days.forEach((value,index) => {
+          if (goal.todayDex==index){
+            var extraStyle = ` style="border: solid 3px var(--primary); box-shadow: 0px 0px 5px var(--accent);"`
+          } else {
+            var extraStyle = ``
+          }
+          if (value==2){
+            calendarDiv+=`<button onclick="updateHabitDay('${goal.id}',${index},0)" class='emptyDay'${extraStyle}></button>`
+            if (index!=29){
+              hits++
+              sumTotal++
+            }
+          } else if (value==1){
+            calendarDiv+=`<button onclick="updateHabitDay('${goal.id}',${index},0)" class='goodDay'${extraStyle}></button>`
+            sumTotal++
+          } else {
+            calendarDiv+=`<button onclick="updateHabitDay('${goal.id}',${index},1)" class='badDay'${extraStyle}></button>`
+            hits++
+            sumTotal++
+          }
+        })
+        output+=`<div class='dailyHabit' id='goal-${goal.id}'><h1>${goal.title}</h1><div class='habitCalendar'>${calendarDiv}</div></div>`
+        var percent = Math.round(((sumTotal-hits)/sumTotal)*100)
+        console.log(percent)
+    }
+  })
+  document.getElementById('goalDisplay').innerHTML = output
+}
+function updateHabitDay(id,index,value){
+  const goaldex = goals.findIndex(o => o.id == id)
+  if (goaldex === -1) return
+  var goal = goals[goaldex]
+  if (index<=goal.todayDex){
+    goal.days[index] = value
+    goals[goaldex] = goal
+    localStorage.setItem('goals',JSON.stringify(goals))
+    refreshGoals()
+  } else {
+    alert('You cannot mark days in the future :)')
+  }
+}
+
+function newGoal(){
+  const gt = goalSelect.value
+  switch (gt){
+    case 'Daily Habit':
+      var goal = {}
+      goal.type = gt
+      goal.title = document.getElementById('goalTitle').value
+      goal.days = [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]
+      goal.today = today
+      goal.todayDex = 0
+      goal.id = crypto.randomUUID()
+      document.getElementById('goalTitle').value = ''
+      break
+  }
+  goals.push(goal)
+  localStorage.setItem('goals',JSON.stringify(goals))
+  goalSelect.value = ''
+  document.getElementById('goalDiv').innerHTML = ''
+  window.location.replace('#Goals')
+  refreshGoals()
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -705,6 +838,7 @@ function load(){
   } else {
     console.log('Notifications affirmative')
   }
+  refreshGoals()
   refreshcontacts()
   refreshtasks()
   dayInit()
