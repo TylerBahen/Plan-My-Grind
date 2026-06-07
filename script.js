@@ -1,3 +1,5 @@
+const version = '0.6.0'
+
 //set up service worker
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("service-worker.js")
@@ -17,6 +19,7 @@ window.addEventListener('hashchange',() => {
   switch (page){
     case '':
     case 'Home':
+      refreshHome()
       changeview('Home')
       break
     case 'Goals':
@@ -235,13 +238,17 @@ function newTask(){
   const tt = document.getElementById('taskTitle')
   const tb = document.getElementById('taskBody')
   if (tt.value!=''){
-    const newTask = {'title':tt.value,'body':tb.value,'completed':0,'date':new Date(),'id':crypto.randomUUID()}
+    const ti = crypto.randomUUID()
+    const newTask = {'title':tt.value,'body':tb.value,'completed':0,'date':new Date(),'id':ti}
     tt.value = ''
     tb.value = ''
     tasks.push(newTask)
     emit('taskset',newTask)
     window.location.replace('#Tasks')
     saveTasks()
+    return ti
+  } else {
+    return null
   }
 }
 
@@ -750,6 +757,7 @@ function refreshGoals(){
           }
         })
         const percent = Math.round(((sumTotal-hits)/sumTotal)*100)
+        goal.bite = `${percent}%`
         output+=`<div class='dailyHabit' id='goal-${goal.id}'><div class='habitHeader'><h1>${goal.title}</h1><h2>${percent}%</h2></div><div class='habitCalendar'>${calendarDiv}</div></div>`
     }
   })
@@ -769,6 +777,10 @@ function updateHabitDay(id,index,value){
   }
 }
 
+function pushTaskFromStone(goal){
+  //todo: add this
+}
+
 function newGoal(){
   const gt = goalSelect.value
   switch (gt){
@@ -780,6 +792,7 @@ function newGoal(){
       goal.today = today
       goal.todayDex = 0
       goal.id = crypto.randomUUID()
+      goal.bite = `0%`
       document.getElementById('goalTitle').value = ''
       break
   }
@@ -794,8 +807,32 @@ function newGoal(){
 
 
 
-
-
+var sessionGoal = null
+async function refreshHome(){
+  //Goals Widget
+  var output = ``
+  if (goals.length>0 && sessionGoal==null){
+    sessionGoal = Math.floor(Math.random()*goals.length)
+  }
+  if (sessionGoal!=null){
+    const goal = goals[sessionGoal]
+    output+=`<div class='homeGoalTile'><h1>${goal.title}</h1><h2>${goal.bite}</h2></div>`
+  }
+  //Events Widget
+  const et = events[today]
+  output+=`<div class='eventsToday'><h1>Upcoming Events</h1>`
+  var threevents = []
+  et.forEach(event => {
+    if(threevents.length<3 && event.start.dateTime!=undefined && minutesFromISO(event.start.dateTime)>minutesFromISO(new Date().toISOString())){
+      threevents.push(event)
+    }
+  })
+  threevents.forEach(event => output+=`<p onclick='viewEvent("${event.id}")'><b>${event.summary} : </b>${minutesToHour(minutesFromISO(event.start.dateTime))} - ${minutesToHour(minutesFromISO(event.end.dateTime))}</p>`)
+  if (threevents.length==0) output+=`Nada, baby!`
+  output+=`</div>`
+  output+=version
+  document.getElementById('homeDisplay').innerHTML = output
+}
 
 
 
@@ -841,6 +878,7 @@ function load(){
   refreshcontacts()
   refreshtasks()
   dayInit()
+  refreshHome()
   emit('taskquery')
 }
 
