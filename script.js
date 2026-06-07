@@ -1,4 +1,4 @@
-const version = '0.6.0'
+const version = '0.6.1'
 
 //set up service worker
 if ("serviceWorker" in navigator) {
@@ -809,15 +809,7 @@ function newGoal(){
 
 var sessionGoal = null
 async function refreshHome(){
-  //Goals Widget
   var output = ``
-  if (goals.length>0 && sessionGoal==null){
-    sessionGoal = Math.floor(Math.random()*goals.length)
-  }
-  if (sessionGoal!=null){
-    const goal = goals[sessionGoal]
-    output+=`<div class='homeGoalTile'><h1>${goal.title}</h1><h2>${goal.bite}</h2></div>`
-  }
   //Events Widget
   const et = events[today]
   output+=`<div class='eventsToday'><h1>Upcoming Events</h1>`
@@ -830,6 +822,14 @@ async function refreshHome(){
   threevents.forEach(event => output+=`<p onclick='viewEvent("${event.id}")'><b>${event.summary} : </b>${minutesToHour(minutesFromISO(event.start.dateTime))} - ${minutesToHour(minutesFromISO(event.end.dateTime))}</p>`)
   if (threevents.length==0) output+=`Nada, baby!`
   output+=`</div>`
+  //Goals Widget
+  if (goals.length>0 && sessionGoal==null){
+    sessionGoal = Math.floor(Math.random()*goals.length)
+  }
+  if (sessionGoal!=null){
+    const goal = goals[sessionGoal]
+    output+=`<div class='homeGoalTile'><h1>${goal.title}</h1><h2>${goal.bite}</h2></div>`
+  }
   output+=version
   document.getElementById('homeDisplay').innerHTML = output
 }
