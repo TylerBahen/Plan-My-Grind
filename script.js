@@ -730,7 +730,7 @@ function refreshGoals(){
         var sumTotal = 0
         goal.days.forEach((value,index) => {
           if (goal.todayDex==index){
-            var extraStyle = ` style="border: solid 3px var(--primary); box-shadow: 0px 0px 5px var(--accent);"`
+            var extraStyle = ` style="border: solid 3px black; box-shadow: 1px 1px 0px black;"`
           } else {
             var extraStyle = ``
           }
@@ -749,9 +749,8 @@ function refreshGoals(){
             sumTotal++
           }
         })
-        output+=`<div class='dailyHabit' id='goal-${goal.id}'><h1>${goal.title}</h1><div class='habitCalendar'>${calendarDiv}</div></div>`
-        var percent = Math.round(((sumTotal-hits)/sumTotal)*100)
-        console.log(percent)
+        const percent = Math.round(((sumTotal-hits)/sumTotal)*100)
+        output+=`<div class='dailyHabit' id='goal-${goal.id}'><div class='habitHeader'><h1>${goal.title}</h1><h2>${percent}%</h2></div><div class='habitCalendar'>${calendarDiv}</div></div>`
     }
   })
   document.getElementById('goalDisplay').innerHTML = output

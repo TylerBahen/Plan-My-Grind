@@ -176,36 +176,54 @@ html, body {
     border: solid 3px var(--secondary);
     border-radius: 10px;
     background-color: #ffffff;
+    max-width: 500px;
 }
 
-.dailyHabit div {
+.habitHeader {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.habitHeader h1 {
+    padding: 6px 6px 0px 6px;
+}
+
+.habitHeader h2 {
     border: solid 3px var(--primary);
     border-radius: 10px;
+    padding: 6px;
     box-sizing: border-box;
-    padding: 5px;
+    background-color: var(--light);
+    align-self: baseline;
+}
+
+.habitCalendar {
+    border: solid 3px var(--primary);
+    background-color: var(--light);
+    border-radius: 10px;
+    box-sizing: border-box;
+    padding: 8px;
     display: grid;
     gap: 5px;
     grid-template-columns: repeat(10,1fr);
     width: 100%;
-    max-width: 500px;
+}
+.dailyHabit button {
+    width: 100%;
+    aspect-ratio: 1/1;
+    border-radius: 6px;
+    border: solid 3px var(--primary);
 }
 .emptyDay {
     background-color: var(--accent);
-    width: 100%;
-    aspect-ratio: 1/1;
-    border-radius: 10px;
 }
 .goodDay {
-    background-color: darkgreen;
-    width: 100%;
-    aspect-ratio: 1/1;
-    border-radius: 10px;
+    background-color: #A9D1C4;
 }
 .badDay {
-    background-color: maroon;
-    width: 100%;
-    aspect-ratio: 1/1;
-    border-radius: 10px;
+    background-color: #F1B2BC;
 }
 
 
