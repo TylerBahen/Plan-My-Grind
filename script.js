@@ -692,7 +692,7 @@ goalSelect.addEventListener('change', (e) => {
   switch (goalSelect.value){
     case '':
       goalHTML = `
-      <p>Daily Habit - Useful for tracking things you want to do on a daily basis, such as accomplishing a daily goal or holding sobriety.</p>
+      <p>Daily Habit - For tracking things you want to do on a daily basis, such as practicing a skill or holding sobriety.</p>
       `
       break
     case 'Daily Habit':
@@ -820,7 +820,7 @@ async function refreshHome(){
     }
   })
   threevents.forEach(event => output+=`<p onclick='viewEvent("${event.id}")'><b>${event.summary} : </b>${minutesToHour(minutesFromISO(event.start.dateTime))} - ${minutesToHour(minutesFromISO(event.end.dateTime))}</p>`)
-  if (threevents.length==0) output+=`Nada, baby!`
+  if (threevents.length==0) output+=`<p>Nada, baby!</p>`
   output+=`</div>`
   //Goals Widget
   if (goals.length>0 && sessionGoal==null){
