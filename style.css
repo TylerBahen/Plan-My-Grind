@@ -92,6 +92,8 @@ html, body {
     height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
+    padding-bottom: 60px;
+    box-sizing: border-box;
 }
 .person {
     width: calc(100% - 45px);
@@ -106,6 +108,8 @@ html, body {
     height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
+    padding-bottom: 60px;
+    box-sizing: border-box;
 }
 #taskDisplay h1 {
     margin:10px;
@@ -167,6 +171,8 @@ html, body {
     height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
+    padding-bottom: 60px;
+    box-sizing: border-box;
 }
 
 .dailyHabit {
@@ -226,6 +232,46 @@ html, body {
     background-color: #F1B2BC;
 }
 
+.steppingStones {
+    width: calc(100% - 45px);
+    margin: 10px;
+    padding: 10px;
+    border: solid 3px var(--secondary);
+    border-radius: 10px;
+    background-color: #ffffff;
+}
+
+.stoneHeader {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.stoneHeader h1 {
+    padding: 3px 0px 0px 0px;
+}
+
+.stoneHeader h2 {
+    border: solid 3px var(--primary);
+    border-radius: 10px;
+    padding: 6px;
+    box-sizing: border-box;
+    background-color: var(--light);
+    align-self: baseline;
+}
+
+.steppingStones p {
+    padding: 6px;
+    margin-top: 10px;
+    border-radius: 10px;
+    background-color: var(--light);
+    border: solid 3px var(--accent);
+}
+
+
+
+
 #homeDisplay {
     width: 100%;
     height: 100%;
@@ -269,9 +315,8 @@ html, body {
     padding: 6px;
     margin-top: 10px;
     border-radius: 10px;
-    background-color: var(--primary);
+    background-color: var(--light);
     border: solid 3px var(--accent);
-    color: var(--light);
 }
 
 
@@ -315,14 +360,20 @@ html, body {
 .popup input {
     width: 100%;
     box-sizing: border-box;
+    border-radius: 10px;
+    border: solid 3px var(--accent);
+    padding-left: 3px;
 }
 
 .popup textarea {
     width: 100%;
-    height: 5em;
+    height: 4em;
     max-width: 100%;
     min-width: 100%;
     box-sizing: border-box;
+    border-radius: 10px;
+    border: solid 3px var(--accent);
+    padding: 3px;
 }
 
 .popup button {
@@ -331,7 +382,7 @@ html, body {
     border: solid 3px var(--accent);
     color: var(--light);
     width: 100%;
-    margin-top: 5px;
+    margin-top: 10px;
 }
 
 #nav {

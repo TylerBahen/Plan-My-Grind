@@ -1,4 +1,4 @@
-const version = '0.6.1'
+const version = '0.6.2'
 
 //set up service worker
 if ("serviceWorker" in navigator) {
@@ -282,6 +282,15 @@ function markComplete(id,fromButton = true){
     emit('taskclear',{id:id})
   }
   saveTasks()
+  if (tasks[i].callback){
+    const callback = tasks[i].callback
+    switch (callback[0]){
+      case 'Goal':
+        handleGoalTask(callback[1])
+        break
+    }
+    forgetTask(id)
+  }
 }
 function forgetTask(id){
   const i = tasks.findIndex(o => o.id == id)
@@ -701,6 +710,11 @@ goalSelect.addEventListener('change', (e) => {
       <button onclick="newGoal()">Create Goal</button>
       `
       break
+    case 'Stepping Stones':
+      goalHTML = `
+      <p>Milestone Title: <br><input type="text" id="goalTitle"></p>
+      <p>Stepping Stones:<br><textarea id="stonesField"></textarea><p>
+      <button onclick="newGoal()">Create Goal</button>`
   }
   document.getElementById('goalDiv').innerHTML = goalHTML
 })
@@ -759,6 +773,14 @@ function refreshGoals(){
         const percent = Math.round(((sumTotal-hits)/sumTotal)*100)
         goal.bite = `${percent}%`
         output+=`<div class='dailyHabit' id='goal-${goal.id}'><div class='habitHeader'><h1>${goal.title}</h1><h2>${percent}%</h2></div><div class='habitCalendar'>${calendarDiv}</div></div>`
+        break
+      case 'Stepping Stones':
+        var stoneslist = ``
+        goal.stones.forEach((stone,index) => {
+          stoneslist+=`<p>${stone}</p>`
+        })
+        output+=`<div class='steppingStones' id='goal-${goal.id}'><div class='stoneHeader'><h1>${goal.title}</h1><h2>${goal.bite}</h2></div>${stoneslist}</div>`
+        break
     }
   })
   document.getElementById('goalDisplay').innerHTML = output
@@ -777,8 +799,37 @@ function updateHabitDay(id,index,value){
   }
 }
 
+function handleGoalTask(id){
+  const i = goals.findIndex(o => o.id == id)
+  if (goals[i].type = 'Stepping Stones'){
+    incrementStones(id)
+  }
+}
+
+function incrementStones(id){
+  const i = goals.findIndex(o => o.id == id)
+  if(goals[i].stonesComplete<goals[i].stones.length-1){
+    goals[i].stonesComplete++
+    goals[i].bite = `${goals[i].stonesComplete}/${goals[i].stones.length}`
+    pushTaskFromStone(goals[i])
+    localStorage.setItem('goals',JSON.stringify(goals))
+    refreshGoals()
+  } else {
+    goals[i].stonesComplete++
+    goals[i].bite = `${goals[i].stonesComplete}/${goals[i].stones.length}`
+    localStorage.setItem('goals',JSON.stringify(goals))
+    refreshGoals()
+    alert('Goal Complete!')
+  }
+}
+
 function pushTaskFromStone(goal){
-  //todo: add this
+  const ti = crypto.randomUUID()
+  const tt = goal.stones[goal.stonesComplete]
+  const newTask = {'title':tt,'body':`From Goal: ${goal.title}`,'completed':0,'date':new Date(),'id':ti,'callback':['Goal',goal.id]}
+  tasks.push(newTask)
+  emit('taskset',newTask)
+  saveTasks()
 }
 
 function newGoal(){
@@ -795,6 +846,18 @@ function newGoal(){
       goal.bite = `0%`
       document.getElementById('goalTitle').value = ''
       break
+    case 'Stepping Stones':
+      var goal = {}
+      goal.type = gt
+      goal.title = document.getElementById('goalTitle').value
+      goal.id = crypto.randomUUID()
+      goal.stones = []
+      goal.stonesComplete = 0
+      document.getElementById('stonesField').value.split('\n').forEach(stone => {
+        goal.stones.push(stone)
+      })
+      goal.bite = `0/${goal.stones.length}`
+      pushTaskFromStone(goal)
   }
   goals.push(goal)
   localStorage.setItem('goals',JSON.stringify(goals))
@@ -820,7 +883,7 @@ async function refreshHome(){
     }
   })
   threevents.forEach(event => output+=`<p onclick='viewEvent("${event.id}")'><b>${event.summary} : </b>${minutesToHour(minutesFromISO(event.start.dateTime))} - ${minutesToHour(minutesFromISO(event.end.dateTime))}</p>`)
-  if (threevents.length==0) output+=`<p>Nada, baby!</p>`
+  if (threevents.length==0) output+=`<p><b>Nada, baby!</b></p>`
   output+=`</div>`
   //Goals Widget
   if (goals.length>0 && sessionGoal==null){
