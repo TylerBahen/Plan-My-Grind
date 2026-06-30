@@ -96,7 +96,7 @@ html, body {
     box-sizing: border-box;
 }
 .person {
-    width: calc(100% - 45px);
+    width: calc(100% - 46px);
     margin: 10px;
     padding: 10px;
     border: solid 3px var(--secondary);
@@ -115,7 +115,7 @@ html, body {
     margin:10px;
 }
 .task {
-    width: calc(100% - 45px);
+    width: calc(100% - 46px);
     margin: 10px;
     padding: 10px;
     border: solid 3px var(--secondary);
@@ -176,7 +176,7 @@ html, body {
 }
 
 .dailyHabit {
-    width: calc(100% - 45px);
+    width: calc(100% - 46px);
     margin: 10px;
     padding: 10px;
     border: solid 3px var(--secondary);
@@ -233,7 +233,7 @@ html, body {
 }
 
 .steppingStones {
-    width: calc(100% - 45px);
+    width: calc(100% - 46px);
     margin: 10px;
     padding: 10px;
     border: solid 3px var(--secondary);
@@ -280,7 +280,7 @@ html, body {
 }
 
 .homeGoalTile {
-    width: calc(100% - 45px);
+    width: calc(100% - 46px);
     margin: 10px;
     padding: 10px;
     border: solid 3px var(--secondary);
@@ -303,7 +303,7 @@ html, body {
 }
 
 .eventsToday {
-    width: calc(100% - 45px);
+    width: calc(100% - 46px);
     margin: 10px;
     padding: 10px;
     border: solid 3px var(--secondary);

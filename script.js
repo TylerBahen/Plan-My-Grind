@@ -1,4 +1,4 @@
-const version = '0.6.2'
+const version = '0.6.3'
 
 //set up service worker
 if ("serviceWorker" in navigator) {
@@ -779,7 +779,9 @@ function refreshGoals(){
         goal.stones.forEach((stone,index) => {
           stoneslist+=`<p>${stone}</p>`
         })
-        output+=`<div class='steppingStones' id='goal-${goal.id}'><div class='stoneHeader'><h1>${goal.title}</h1><h2>${goal.bite}</h2></div>${stoneslist}</div>`
+        if (goal.stones.length==goal.stonesComplete && goal.completedDate!=today){
+          output+=`<div class='steppingStones' id='goal-${goal.id}'><div class='stoneHeader'><h1>${goal.title}</h1><h2>${goal.bite}</h2></div>${stoneslist}</div>`
+        }
         break
     }
   })
@@ -817,6 +819,7 @@ function incrementStones(id){
   } else {
     goals[i].stonesComplete++
     goals[i].bite = `${goals[i].stonesComplete}/${goals[i].stones.length}`
+    goals[i].completedDate = today
     localStorage.setItem('goals',JSON.stringify(goals))
     refreshGoals()
     alert('Goal Complete!')
@@ -882,7 +885,7 @@ async function refreshHome(){
       threevents.push(event)
     }
   })
-  threevents.forEach(event => output+=`<p onclick='viewEvent("${event.id}")'><b>${event.summary} : </b>${minutesToHour(minutesFromISO(event.start.dateTime))} - ${minutesToHour(minutesFromISO(event.end.dateTime))}</p>`)
+  threevents.forEach(event => output+=`<p onclick='viewEvent("${event.id}")'><b>${event.summary}</b><br>${minutesToHour(minutesFromISO(event.start.dateTime))} - ${minutesToHour(minutesFromISO(event.end.dateTime))}</p>`)
   if (threevents.length==0) output+=`<p><b>Nada, baby!</b></p>`
   output+=`</div>`
   //Goals Widget
