@@ -1,4 +1,4 @@
-const version = '0.6.3'
+const version = '0.6.4'
 
 //set up service worker
 if ("serviceWorker" in navigator) {
@@ -780,6 +780,8 @@ function refreshGoals(){
           stoneslist+=`<p>${stone}</p>`
         })
         if (goal.stones.length==goal.stonesComplete && goal.completedDate!=today){
+          //
+        } else {
           output+=`<div class='steppingStones' id='goal-${goal.id}'><div class='stoneHeader'><h1>${goal.title}</h1><h2>${goal.bite}</h2></div>${stoneslist}</div>`
         }
         break
