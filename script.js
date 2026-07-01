@@ -780,8 +780,12 @@ function refreshGoals(){
         goal.stones.forEach((stone,index) => {
           stoneslist+=`<p>${stone}</p>`
         })
-        if (goal.stones.length==goal.stonesComplete && goal.completedDate!=today){
-          toClear.push(index)
+        if (goal.stones.length==goal.stonesComplete){
+          if (goal.completedDate==today){
+            sessionGoal = index
+          } else {
+            toClear.push(index)
+          }
         } else {
           output+=`<div class='steppingStones' id='goal-${goal.id}'><div class='stoneHeader'><h1>${goal.title}</h1><h2>${goal.bite}</h2></div>${stoneslist}</div>`
         }
@@ -829,6 +833,7 @@ function incrementStones(id){
     localStorage.setItem('goals',JSON.stringify(goals))
     refreshGoals()
     alert('Goal Complete!')
+    sessionGoal = i
   }
 }
 
