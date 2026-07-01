@@ -1,4 +1,4 @@
-const version = '0.6.4'
+const version = '0.6.5'
 
 //set up service worker
 if ("serviceWorker" in navigator) {
@@ -728,7 +728,8 @@ function refreshGoals(){
     goals = JSON.parse(goalsraw)
   }
   var output = ''
-  goals.forEach(goal => {
+  var toClear = []
+  goals.forEach((goal,index) => {
     switch (goal.type){
       case 'Daily Habit':
         if (goal.today!=today){
@@ -780,13 +781,16 @@ function refreshGoals(){
           stoneslist+=`<p>${stone}</p>`
         })
         if (goal.stones.length==goal.stonesComplete && goal.completedDate!=today){
-          //
+          toClear.push(index)
         } else {
           output+=`<div class='steppingStones' id='goal-${goal.id}'><div class='stoneHeader'><h1>${goal.title}</h1><h2>${goal.bite}</h2></div>${stoneslist}</div>`
         }
         break
     }
   })
+  toClear.sort((a,b) => b-a)
+  toClear.forEach(index => goals.splice(index,1))
+  localStorage.setItem('goals',JSON.stringify(goals))
   document.getElementById('goalDisplay').innerHTML = output
 }
 function updateHabitDay(id,index,value){
