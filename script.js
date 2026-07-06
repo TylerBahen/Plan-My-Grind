@@ -61,9 +61,9 @@ function changeview(window){
 function emit(action,messageRaw = {}){
   const message = messageRaw
   message.action = action
-    navigator.serviceWorker.ready.then(reg => {
-        reg.active.postMessage(message);
-    });
+  navigator.serviceWorker.ready.then(reg => {
+      reg.active.postMessage(message);
+  });
 }
 
 //Close any popup windows
@@ -783,6 +783,7 @@ function refreshGoals(){
         if (goal.stones.length==goal.stonesComplete){
           if (goal.completedDate==today){
             sessionGoal = index
+            output+=`<div class='steppingStones' id='goal-${goal.id}'><div class='stoneHeader'><h1>${goal.title}</h1><h2>${goal.bite}</h2></div>${stoneslist}</div>`
           } else {
             toClear.push(index)
           }
