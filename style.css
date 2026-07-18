@@ -113,7 +113,7 @@ html, body {
 .personWide {
     width: calc(100%);
     padding: 10px;
-    border: solid 3px var(--secondary);
+    border: solid 3px var(--accent);
     border-radius: 10px;
     background-color: var(--light);
     box-sizing: border-box;
@@ -411,14 +411,14 @@ html, body {
 
 #peopleSearchResults {
     min-height: 200px;
-    max-height: 50%;
+    max-height: 50vh;
     background-color: var(--accent);
     border-radius: 10px;
     padding-top: 3px;
     margin-top: 10px;
     padding-bottom: 3px;
     box-sizing: border-box;
-    overflow-y: auto;
+    overflow-y: scroll;
 }
 .selectedPerson {
     background-color: var(--primary);

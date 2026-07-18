@@ -1,4 +1,4 @@
-const version = '0.7.0'
+const version = '0.7.1'
 
 
 //This part is for my Final Project :)
@@ -6,6 +6,7 @@ function addPeople(){
   document.getElementById('PeopleSelect').style.visibility = 'visible'
   document.getElementById('blanket2').style.visibility = 'visible'
   renderPeopleResults(people)
+  document.getElementById('peopleSearchBar').focus()
 }
 function stopAddingPeople(){
   document.getElementById('PeopleSelect').style.visibility = 'hidden'
