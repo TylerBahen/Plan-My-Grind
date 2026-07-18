@@ -31,9 +31,16 @@ html, body {
     display: flex;
     align-items: center;
     color: var(--light);
+    display: flex;
+    justify-content: space-between;
 }
 #header h1 {
     margin-left: 10px;
+}
+#settingsBtn {
+    height: 28px;
+    width: 28px;
+    margin: 10px;
 }
 
 .mainview {
@@ -102,6 +109,15 @@ html, body {
     border: solid 3px var(--secondary);
     border-radius: 10px;
     background-color: #ffffff;
+}
+.personWide {
+    width: calc(100%);
+    padding: 10px;
+    border: solid 3px var(--secondary);
+    border-radius: 10px;
+    background-color: var(--light);
+    box-sizing: border-box;
+    margin-top: 10px;
 }
 #taskDisplay {
     width: 100%;
@@ -331,6 +347,13 @@ html, body {
     background-color: rgba(0, 0, 0, 0.5);
     visibility: hidden;
 }
+#blanket2 {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.25);
+    visibility: hidden;
+}
 #syncWindow {
     visibility: hidden;
     position: absolute;
@@ -356,6 +379,7 @@ html, body {
     border: solid 3px var(--secondary);
     border-radius: 10px;
     visibility: hidden;
+    overflow-y: auto;
 }
 .popup input {
     width: 100%;
@@ -385,6 +409,22 @@ html, body {
     margin-top: 10px;
 }
 
+#peopleSearchResults {
+    min-height: 200px;
+    max-height: 50%;
+    background-color: var(--accent);
+    border-radius: 10px;
+    padding-top: 3px;
+    margin-top: 10px;
+    padding-bottom: 3px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+.selectedPerson {
+    background-color: var(--primary);
+    color: #ffffff;
+}
+
 #nav {
     position: absolute;
     bottom: 0;
@@ -408,3 +448,4 @@ html, body {
 #nav a:hover {
     background-color: var(--secondary);
 }
+

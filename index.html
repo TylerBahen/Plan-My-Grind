@@ -4,7 +4,7 @@
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="style.css">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="images/192x.png" type="image/x-icon">
     <title>Plan My Grind</title>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -12,6 +12,7 @@
 <body onload="load()">
     <div id="header">
         <h1 id="title"></h1>
+        <a href="#Settings"><img src="images/nav.svg" alt="" id="settingsBtn" aria-label="Settings"></a>
     </div>
 
     <div id="Home" class="mainview">
@@ -83,7 +84,9 @@
         <h1>Add Task</h1>
         <p>Title:<br><input type="text" id="taskTitle"></p>
         <p>Description:<br><textarea type="text" id="taskBody"></textarea></p>
+        <button onclick="addPeople()">Add People</button>
         <button onclick="newTask()">Create Task</button>
+        <div id="taskPeople"></div>
     </div>
     <div class="popup" id="NewEvent">
         <h1>Add Event</h1>
@@ -111,6 +114,13 @@
     <div class="popup" id="PersonView">
         <h1></h1>
         <p></p>
+    </div>
+    <div id="blanket2" onclick="stopAddingPeople()"></div>
+    <div class="popup" id="PeopleSelect">
+        <h1>Select People:</h1>
+        <input type="text" id="peopleSearchBar" placeholder="Search Your People...">
+        <div id="peopleSearchResults"></div>
+        <button onclick="finishAddingPeople()">Done</button>
     </div>
     <div id="syncWindow"><h1>Syncing...</h1></div>
     <script src="script.js"></script>

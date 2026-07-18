@@ -1,4 +1,95 @@
-const version = '0.6.5'
+const version = '0.7.0'
+
+
+//This part is for my Final Project :)
+function addPeople(){
+  document.getElementById('PeopleSelect').style.visibility = 'visible'
+  document.getElementById('blanket2').style.visibility = 'visible'
+  renderPeopleResults(people)
+}
+function stopAddingPeople(){
+  document.getElementById('PeopleSelect').style.visibility = 'hidden'
+  document.getElementById('blanket2').style.visibility = 'hidden'
+  selectedPeople = []
+}
+function finishAddingPeople(){
+  document.getElementById('PeopleSelect').style.visibility = 'hidden'
+  document.getElementById('blanket2').style.visibility = 'hidden'
+  const page = window.location.hash.replace('#','')
+  var targetDiv = null
+  switch (page){
+    case 'NewTask':
+      targetDiv = document.getElementById('taskPeople')
+      break
+  }
+  if (targetDiv!=null){
+    var out = ``
+    selectedPeople.forEach(person => {
+      out+=`<p class="personWide">${person.name}</p>`
+    })
+    targetDiv.innerHTML = out
+  }
+}
+
+const peopleSearchBar = document.getElementById('peopleSearchBar')
+peopleSearchBar.addEventListener('input',() => {
+  const query = clean(peopleSearchBar.value.toLowerCase())
+  renderPeopleResults(people.filter(person => {
+    const name = clean(person.name.toLowerCase())
+    return name.includes(query) || person.tel.toString().includes(query)
+  }))
+})
+
+function renderPeopleResults(people){
+  const out = document.getElementById('peopleSearchResults')
+  out.innerHTML = ''
+  people.forEach(person => {
+    const tile = document.createElement('div')
+    tile.classList.add('person')
+    if (selectedPeople.some(c => c.id == person.id)){
+      tile.classList.add('selectedPerson')
+    }
+    tile.innerHTML = `<p><b>${person.name}</b></p>`
+    tile.addEventListener('click',() => {
+      selectPerson(person.id)
+    })
+    out.appendChild(tile)
+  })
+}
+
+var selectedPeople = []
+function selectPerson(id){
+  const contact = people.find(o => o.id == id)
+  if(selectedPeople.some(c => c.id == id)){
+    selectedPeople = selectedPeople.filter(person => person.id!=id)
+  } else {
+    selectedPeople.push(contact)
+  }
+  const query = peopleSearchBar.value
+  renderPeopleResults(people.filter(person => {
+    if(person.name.includes(query)){
+      return true
+    } else {
+      return false
+    }
+  }))
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+//Here's everything else I've written, if you're curious
+
+
 
 //set up service worker
 if ("serviceWorker" in navigator) {
@@ -78,6 +169,8 @@ function closepopups(){
 function openpopup(window){
   document.getElementById(window).style.visibility = 'visible'
   document.getElementById('blanket').style.visibility = 'visible'
+  selectedPeople = []
+  document.getElementById('taskPeople').innerHTML = ''
 }
 
 //the backward navigation function for popup windows
@@ -213,7 +306,20 @@ async function refreshtasks(){
     //TODO: Pull task from service worker db, update completion status
     const display = `<div class="task"><p><b>${task.title}</b></p><p>${task.body}</p>`
     if (task.completed==0){
-      incompleteDisplay+=display+`<button class="completeTask" onclick="markComplete('${task.id}')">Mark Complete</button></div>`
+      var peopleDiv = ``
+      if (task.people!=undefined && task.people.length>0){
+        peopleDiv+='<div>'
+        task.people.forEach(id => {
+          const i = people.findIndex(o => o.id == id)
+          if (i==-1){
+            //Remove person from task
+          } else {
+            peopleDiv+=`<p class='personWide' onclick='viewPerson(${people[i].id})'>${people[i].name}</p>`
+          }
+        })
+        peopleDiv+='</div>'
+      }
+      incompleteDisplay+=display+`<button class="completeTask" onclick="markComplete('${task.id}')">Mark Complete</button>${peopleDiv}</div>`
     } else {
       completeDisplay+=display+`<button class="removeTask" onclick="forgetTask('${task.id}')">Remove From Completed</button></div>`
     }
@@ -239,9 +345,10 @@ function newTask(){
   const tb = document.getElementById('taskBody')
   if (tt.value!=''){
     const ti = crypto.randomUUID()
-    const newTask = {'title':tt.value,'body':tb.value,'completed':0,'date':new Date(),'id':ti}
+    const newTask = {'title':tt.value,'body':tb.value,'completed':0,'date':new Date(),'id':ti,people:selectedPeople.map(person => person.id)}
     tt.value = ''
     tb.value = ''
+    selectedPeople = []
     tasks.push(newTask)
     emit('taskset',newTask)
     window.location.replace('#Tasks')
@@ -814,7 +921,7 @@ function updateHabitDay(id,index,value){
 
 function handleGoalTask(id){
   const i = goals.findIndex(o => o.id == id)
-  if (goals[i].type = 'Stepping Stones'){
+  if (goals[i].type == 'Stepping Stones'){
     incrementStones(id)
   }
 }
@@ -892,11 +999,13 @@ async function refreshHome(){
   const et = events[today]
   output+=`<div class='eventsToday'><h1>Upcoming Events</h1>`
   var threevents = []
-  et.forEach(event => {
-    if(threevents.length<3 && event.start.dateTime!=undefined && minutesFromISO(event.start.dateTime)>minutesFromISO(new Date().toISOString())){
-      threevents.push(event)
-    }
-  })
+  if (et!=undefined){
+    et.forEach(event => {
+      if(threevents.length<3 && event.start.dateTime!=undefined && minutesFromISO(event.start.dateTime)>minutesFromISO(new Date().toISOString())){
+        threevents.push(event)
+      }
+    })
+  }
   threevents.forEach(event => output+=`<p onclick='viewEvent("${event.id}")'><b>${event.summary}</b><br>${minutesToHour(minutesFromISO(event.start.dateTime))} - ${minutesToHour(minutesFromISO(event.end.dateTime))}</p>`)
   if (threevents.length==0) output+=`<p><b>Nada, baby!</b></p>`
   output+=`</div>`
@@ -1004,7 +1113,14 @@ function googleSignIn(){
 }
 
 
-
+//Boilerplate String Cleaning
+const clean = str =>
+  str
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-zA-Z0-9 ]+/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
 //Vibe-coded wrapper for swipe navigation on planner
 let touchStartX = 0;
 let touchStartY = 0;
