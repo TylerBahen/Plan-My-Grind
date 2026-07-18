@@ -6,7 +6,6 @@ function addPeople(){
   document.getElementById('PeopleSelect').style.visibility = 'visible'
   document.getElementById('blanket2').style.visibility = 'visible'
   renderPeopleResults(people)
-  document.getElementById('peopleSearchBar').focus()
 }
 function stopAddingPeople(){
   document.getElementById('PeopleSelect').style.visibility = 'hidden'

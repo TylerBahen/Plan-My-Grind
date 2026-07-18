@@ -113,7 +113,7 @@ html, body {
 .personWide {
     width: calc(100%);
     padding: 10px;
-    border: solid 3px var(--accent);
+    border: solid 3px var(--primary);
     border-radius: 10px;
     background-color: var(--light);
     box-sizing: border-box;
@@ -124,7 +124,7 @@ html, body {
     height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
-    padding-bottom: 60px;
+    padding-bottom: 120px;
     box-sizing: border-box;
 }
 #taskDisplay h1 {
