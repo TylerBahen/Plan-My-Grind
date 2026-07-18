@@ -1,4 +1,4 @@
-const version = '0.7.1'
+const version = '0.7.2'
 
 
 //This part is for my Final Project :)
