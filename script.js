@@ -46,7 +46,7 @@ function renderPeopleResults(people){
   people.forEach(person => {
     const tile = document.createElement('div')
     tile.classList.add('person')
-    if (selectedPeople.some(c => c.id == person.id)){
+    if (selectedPeople.some(a => a.id==person.id)){
       tile.classList.add('selectedPerson')
     }
     tile.innerHTML = `<p><b>${person.name}</b></p>`
@@ -59,8 +59,8 @@ function renderPeopleResults(people){
 
 var selectedPeople = []
 function selectPerson(id){
-  const contact = people.find(o => o.id == id)
-  if(selectedPeople.some(c => c.id == id)){
+  const contact = people.find(person => person.id==id)
+  if(selectedPeople.some(person => person.id==id)){
     selectedPeople = selectedPeople.filter(person => person.id!=id)
   } else {
     selectedPeople.push(contact)
