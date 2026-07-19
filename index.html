@@ -12,19 +12,7 @@
 <body onload="load()">
     <div id="header">
         <h1 id="title"></h1>
-        <a href="#Settings"><img src="images/nav.svg" alt="" id="settingsBtn" aria-label="Settings"></a>
-    </div>
-
-    <div id="Home" class="mainview">
-        <div id="homeDisplay"></div>
-    </div>
-    <div id="Goals" class="mainview">
-        <a href="#NewGoal"><button class="plusButton">+</button></a>
-        <div id="goalDisplay"></div>
-    </div>
-    <div id="People" class="mainview">
-        <a href="#NewPerson"><button class="plusButton">+</button></a>
-        <div id="peopleDisplay"></div>
+        <a href="#Settings"><img src="images/nav.svg" alt="Settings Icon" id="settingsBtn" aria-label="Settings"></a>
     </div>
     <div id="Planner" class="mainview">
         <nav class="datepicker">
@@ -39,6 +27,18 @@
         <div id="dayDisplay"></div>
         <button class="secondButton" onclick="syncGoogleCalendar()">⟳</button>
         <a href="#NewEvent"><button class="plusButton">+</button></a>
+    </div>
+    <div id="syncWindow"><h1>Syncing...</h1></div>
+    <div id="Home" class="mainview">
+        <div id="homeDisplay"></div>
+    </div>
+    <div id="Goals" class="mainview">
+        <a href="#NewGoal"><button class="plusButton">+</button></a>
+        <div id="goalDisplay"></div>
+    </div>
+    <div id="People" class="mainview">
+        <a href="#NewPerson"><button class="plusButton">+</button></a>
+        <div id="peopleDisplay"></div>
     </div>
     <div id="Tasks" class="mainview">
         <a href="#NewTask"><button class="plusButton">+</button></a>
@@ -122,7 +122,6 @@
         <div id="peopleSearchResults"></div>
         <button onclick="finishAddingPeople()">Done</button>
     </div>
-    <div id="syncWindow"><h1>Syncing...</h1></div>
     <script src="script.js"></script>
 </body>
 </html>
