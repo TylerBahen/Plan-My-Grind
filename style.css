@@ -286,6 +286,48 @@ html, body {
 }
 
 
+.keyIndicator {
+    width: calc(100% - 46px);
+    margin: 10px;
+    padding: 10px;
+    border: solid 3px var(--secondary);
+    border-radius: 10px;
+    background-color: #ffffff;
+    max-width: 500px;
+}
+
+.keyIndicator h1 {
+    padding: 3px 0px 0px 0px;
+    margin-bottom: 10px;
+}
+
+.keyBar {
+    display: flex;
+    width: 100%;
+    gap: 10px;
+}
+
+.keyBar button {
+    width: 100%;
+    font-size: xx-large;
+    border-radius: 10px;
+    background-color: var(--light);
+    border: solid 3px var(--accent);
+    color: var(--primary);
+}
+
+.keyBar h2 {
+    width: 100%;
+    border: solid 3px var(--primary);
+    border-radius: 10px;
+    padding: 6px;
+    box-sizing: border-box;
+    background-color: var(--light);
+    align-self: baseline;
+    text-align: center;
+}
+
+
 
 
 #homeDisplay {

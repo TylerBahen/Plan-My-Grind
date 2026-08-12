@@ -1,4 +1,4 @@
-const version = '0.7.2'
+const version = '0.7.3'
 
 
 //This part is for my Final Project :)
@@ -822,6 +822,14 @@ goalSelect.addEventListener('change', (e) => {
       <p>Milestone Title: <br><input type="text" id="goalTitle"></p>
       <p>Stepping Stones:<br><textarea id="stonesField"></textarea><p>
       <button onclick="newGoal()">Create Goal</button>`
+      break
+    case 'Weekly Key Indicator':
+      goalHTML = `
+      <p>Title:<br><input type="text" id="goalTitle"></p>
+      <p>Taregt:<br><input type="number" id="goalTarget" min=0 value=0></p>
+      <p>Start Date:<br><input type="date" id="goalDate" value="${today}"></p>
+      <button onclick="newGoal()">Create Goal</button>
+      `
   }
   document.getElementById('goalDiv').innerHTML = goalHTML
 })
@@ -898,6 +906,9 @@ function refreshGoals(){
           output+=`<div class='steppingStones' id='goal-${goal.id}'><div class='stoneHeader'><h1>${goal.title}</h1><h2>${goal.bite}</h2></div>${stoneslist}</div>`
         }
         break
+      case "Weekly Key Indicator":
+        output+=`<div class='keyIndicator' id='goal-${goal.id}'><h1>${goal.title}</h1><div class='keyBar'><button onclick="moveKI('${goal.id}',-1)">-</button><h2>${goal.bite}</h2><button onclick="moveKI('${goal.id}',1)">+</button></div></div>`
+        break
     }
   })
   toClear.sort((a,b) => b-a)
@@ -966,7 +977,6 @@ function newGoal(){
       goal.todayDex = 0
       goal.id = crypto.randomUUID()
       goal.bite = `0%`
-      document.getElementById('goalTitle').value = ''
       break
     case 'Stepping Stones':
       var goal = {}
@@ -980,12 +990,34 @@ function newGoal(){
       })
       goal.bite = `0/${goal.stones.length}`
       pushTaskFromStone(goal)
+      break
+    case 'Weekly Key Indicator':
+      var goal = {}
+      goal.type = gt
+      goal.title = document.getElementById('goalTitle').value
+      goal.id = crypto.randomUUID()
+      goal.amount = 0
+      goal.target = document.getElementById('goalTarget').value
+      goal.bite = `0/${goal.target}`
+      goal.start = document.getElementById('goalDate').value
+      break
   }
   goals.push(goal)
   localStorage.setItem('goals',JSON.stringify(goals))
   goalSelect.value = ''
   document.getElementById('goalDiv').innerHTML = ''
   window.location.replace('#Goals')
+  refreshGoals()
+}
+
+function moveKI(id,amount){
+  const i = goals.findIndex(o => o.id == id)
+  goals[i].amount+=amount
+  if (!(goals[i].amount>=0)){
+    goals[i].amount = 0
+  }
+  goals[i].bite = `${goals[i].amount}/${goals[i].target}`
+  localStorage.setItem('goals',JSON.stringify(goals))
   refreshGoals()
 }
 
