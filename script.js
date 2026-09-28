@@ -1,7 +1,144 @@
 const version = '0.7.3'
 
 
-//This part is for my Final Project :)
+
+//set up service worker
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js")
+    .then(() => {
+        console.log("Service Worker registered, we are clear for takeoff...")
+    })
+    .catch(err => console.error("SW registration failed:", err));
+
+}
+
+const contactsSupported = "contacts" in navigator && "ContactsManager" in window;
+
+//Grab when the page changes hash url and handle it
+window.addEventListener('hashchange',() => {
+  const page = window.location.hash.replace('#','')
+  closepopups()
+  switch (page){
+    case '':
+    case 'Home':
+      refreshHome()
+      changeview('Home')
+      break
+    case 'Goals':
+    case 'Planner':
+    case 'People':
+    case 'Tasks':
+      changeview(page)
+      break
+    case 'Settings':
+    case 'NewPerson':
+    case 'NewTask':
+    case 'EventView':
+    case 'PersonView':
+    case 'NewGoal':
+    case 'GoalView':
+      openpopup(page)
+      break
+    case 'NewEvent':
+      document.getElementById('date').value = selectedDay
+      openpopup(page)
+      break
+  }
+})
+
+//Window changing thingy
+function changeview(window){
+  if (window!='Planner'){
+    document.getElementById('title').innerHTML = window
+  } else {
+    document.getElementById('title').innerHTML = selectedMonth
+  }
+  const windows = ['Goals', 'Planner', 'Home', 'People', 'Tasks']
+    windows.forEach((i) => {
+        document.getElementById(i).style.visibility = 'hidden'
+    })
+    document.getElementById(window).style.visibility = 'visible'
+}
+
+//Emit to the service worker
+function emit(action,messageRaw = {}){
+  const message = messageRaw
+  message.action = action
+  navigator.serviceWorker.ready.then(reg => {
+      reg.active.postMessage(message);
+  });
+}
+
+//Close any popup windows
+function closepopups(){
+  const popups = ['Settings','NewPerson','NewTask','NewEvent','NewGoal','EventView','PersonView','GoalView']
+  popups.forEach((popup) => {
+    document.getElementById(popup).style.visibility = 'hidden'
+  })
+  document.getElementById('blanket').style.visibility = 'hidden'
+}
+//Open the specified window
+function openpopup(window){
+  document.getElementById(window).style.visibility = 'visible'
+  document.getElementById('blanket').style.visibility = 'visible'
+  selectedPeople = []
+  document.getElementById('taskPeople').innerHTML = ''
+  document.getElementById('goalPeople').innerHTML = ''
+}
+
+//the backward navigation function for popup windows
+function navBack(){
+  history.back()
+}
+
+//pull all the contacts and put them on the page
+var people = []
+function refreshcontacts(){
+  const contactsraw = localStorage.getItem('contacts')
+  var contacts
+  if (contactsraw==null){
+    contacts = []
+  } else {
+    contacts = JSON.parse(contactsraw)
+  }
+  var display = ''
+  contacts.forEach(contact => {
+    display+=`<div class="person" onclick="viewPerson(${contact.id})"><p><b>${contact.name}</b></p>`
+    /*if (contact.tel!=[]){
+      contact.tel.forEach(number => {
+        display+=`<p>${formatPhone(number)} : <a href="tel:${number}">Call</a> / <a href="sms:${number}">Text</a></p>`
+      })
+    }
+    if (contact.email!=[]){
+      contact.email.forEach(address => {
+        display+=`<p>${address} : <a href="mailto:${address}">Email</a></p>`
+      })
+    }*/
+    display+='</div>'
+  })
+  document.getElementById('peopleDisplay').innerHTML = display
+  people = contacts
+}
+
+function viewPerson(id){
+  const contact = people.find(o => o.id == id)
+  var display = ""
+  document.querySelector('#PersonView h1').innerHTML =contact.name
+  if (contact.tel!=[]){
+    contact.tel.forEach(number => {
+      display+=`<p>${formatPhone(number)} : <a href="tel:${number}">Call</a> / <a href="sms:${number}">Text</a></p>`
+    })
+  }
+  if (contact.email!=[]){
+    contact.email.forEach(address => {
+      display+=`<p>${address} : <a href="mailto:${address}">Email</a></p>`
+    })
+  }
+  document.querySelector('#PersonView p').innerHTML = display
+  window.location.hash = 'PersonView'
+}
+
+//Adding people to items
 function addPeople(){
   document.getElementById('PeopleSelect').style.visibility = 'visible'
   document.getElementById('blanket2').style.visibility = 'visible'
@@ -20,6 +157,9 @@ function finishAddingPeople(){
   switch (page){
     case 'NewTask':
       targetDiv = document.getElementById('taskPeople')
+      break
+    case 'NewGoal':
+      targetDiv = document.getElementById('goalPeople')
       break
   }
   if (targetDiv!=null){
@@ -73,156 +213,6 @@ function selectPerson(id){
       return false
     }
   }))
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-//Here's everything else I've written, if you're curious
-
-
-
-//set up service worker
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("service-worker.js")
-    .then(() => {
-        console.log("Service Worker registered, we are clear for takeoff...")
-    })
-    .catch(err => console.error("SW registration failed:", err));
-
-}
-
-const contactsSupported = "contacts" in navigator && "ContactsManager" in window;
-
-//Grab when the page changes hash url and handle it
-window.addEventListener('hashchange',() => {
-  const page = window.location.hash.replace('#','')
-  closepopups()
-  switch (page){
-    case '':
-    case 'Home':
-      refreshHome()
-      changeview('Home')
-      break
-    case 'Goals':
-    case 'Planner':
-    case 'People':
-    case 'Tasks':
-      changeview(page)
-      break
-    case 'Settings':
-    case 'NewPerson':
-    case 'NewTask':
-    case 'EventView':
-    case 'PersonView':
-    case 'NewGoal':
-      openpopup(page)
-      break
-    case 'NewEvent':
-      document.getElementById('date').value = selectedDay
-      openpopup(page)
-      break
-  }
-})
-
-//Window changing thingy
-function changeview(window){
-  if (window!='Planner'){
-    document.getElementById('title').innerHTML = window
-  } else {
-    document.getElementById('title').innerHTML = selectedMonth
-  }
-  const windows = ['Goals', 'Planner', 'Home', 'People', 'Tasks']
-    windows.forEach((i) => {
-        document.getElementById(i).style.visibility = 'hidden'
-    })
-    document.getElementById(window).style.visibility = 'visible'
-}
-
-//Emit to the service worker
-function emit(action,messageRaw = {}){
-  const message = messageRaw
-  message.action = action
-  navigator.serviceWorker.ready.then(reg => {
-      reg.active.postMessage(message);
-  });
-}
-
-//Close any popup windows
-function closepopups(){
-  const popups = ['Settings','NewPerson','NewTask','NewEvent','NewGoal','EventView','PersonView']
-  popups.forEach((popup) => {
-    document.getElementById(popup).style.visibility = 'hidden'
-  })
-  document.getElementById('blanket').style.visibility = 'hidden'
-}
-//Open the specified window
-function openpopup(window){
-  document.getElementById(window).style.visibility = 'visible'
-  document.getElementById('blanket').style.visibility = 'visible'
-  selectedPeople = []
-  document.getElementById('taskPeople').innerHTML = ''
-}
-
-//the backward navigation function for popup windows
-function navBack(){
-  history.back()
-}
-
-//pull all the contacts and put them on the page
-var people = []
-function refreshcontacts(){
-  const contactsraw = localStorage.getItem('contacts')
-  var contacts
-  if (contactsraw==null){
-    contacts = []
-  } else {
-    contacts = JSON.parse(contactsraw)
-  }
-  var display = ''
-  contacts.forEach(contact => {
-    display+=`<div class="person" onclick="viewPerson(${contact.id})"><p><b>${contact.name}</b></p>`
-    /*if (contact.tel!=[]){
-      contact.tel.forEach(number => {
-        display+=`<p>${formatPhone(number)} : <a href="tel:${number}">Call</a> / <a href="sms:${number}">Text</a></p>`
-      })
-    }
-    if (contact.email!=[]){
-      contact.email.forEach(address => {
-        display+=`<p>${address} : <a href="mailto:${address}">Email</a></p>`
-      })
-    }*/
-    display+='</div>'
-  })
-  document.getElementById('peopleDisplay').innerHTML = display
-  people = contacts
-}
-
-function viewPerson(id){
-  const contact = people.find(o => o.id == id)
-  var display = ""
-  document.querySelector('#PersonView h1').innerHTML =contact.name
-  if (contact.tel!=[]){
-    contact.tel.forEach(number => {
-      display+=`<p>${formatPhone(number)} : <a href="tel:${number}">Call</a> / <a href="sms:${number}">Text</a></p>`
-    })
-  }
-  if (contact.email!=[]){
-    contact.email.forEach(address => {
-      display+=`<p>${address} : <a href="mailto:${address}">Email</a></p>`
-    })
-  }
-  document.querySelector('#PersonView p').innerHTML = display
-  window.location.hash = 'PersonView'
 }
 
 //Take form stuff and create contact
@@ -408,6 +398,8 @@ function saveTasks(){
   localStorage.setItem('tasks',JSON.stringify(tasks))
   refreshtasks()
 }
+
+
 
 //Sync Google Calender the first time each session
 var googleLoggedIn = false
@@ -821,6 +813,8 @@ goalSelect.addEventListener('change', (e) => {
       goalHTML = `
       <p>Milestone Title: <br><input type="text" id="goalTitle"></p>
       <p>Stepping Stones:<br><textarea id="stonesField"></textarea><p>
+      <button onclick="addPeople()">Add People</button>
+      <div id="goalPeople"></div>
       <button onclick="newGoal()">Create Goal</button>`
       break
     case 'Weekly Key Indicator':
@@ -888,7 +882,7 @@ function refreshGoals(){
         })
         const percent = Math.round(((sumTotal-hits)/sumTotal)*100)
         goal.bite = `${percent}%`
-        output+=`<div class='dailyHabit' id='goal-${goal.id}'><div class='habitHeader'><h1>${goal.title}</h1><h2>${percent}%</h2></div><div class='habitCalendar'>${calendarDiv}</div></div>`
+        output+=`<div class='dailyHabit' id='goal-${goal.id}'><div class='habitHeader' onclick='viewGoal("${goal.id}")'><h1>${goal.title}</h1><h2>${percent}%</h2></div><div class='habitCalendar'>${calendarDiv}</div></div>`
         break
       case 'Stepping Stones':
         var stoneslist = ``
@@ -898,16 +892,16 @@ function refreshGoals(){
         if (goal.stones.length==goal.stonesComplete){
           if (goal.completedDate==today){
             sessionGoal = index
-            output+=`<div class='steppingStones' id='goal-${goal.id}'><div class='stoneHeader'><h1>${goal.title}</h1><h2>${goal.bite}</h2></div>${stoneslist}</div>`
+            output+=`<div class='steppingStones' id='goal-${goal.id}'><div class='stoneHeader' onclick='viewGoal("${goal.id}")'><h1>${goal.title}</h1><h2>${goal.bite}</h2></div>${stoneslist}</div>`
           } else {
             toClear.push(index)
           }
         } else {
-          output+=`<div class='steppingStones' id='goal-${goal.id}'><div class='stoneHeader'><h1>${goal.title}</h1><h2>${goal.bite}</h2></div>${stoneslist}</div>`
+          output+=`<div class='steppingStones' id='goal-${goal.id}'><div class='stoneHeader' onclick='viewGoal("${goal.id}")'><h1>${goal.title}</h1><h2>${goal.bite}</h2></div>${stoneslist}</div>`
         }
         break
       case "Weekly Key Indicator":
-        output+=`<div class='keyIndicator' id='goal-${goal.id}'><h1>${goal.title}</h1><div class='keyBar'><button onclick="moveKI('${goal.id}',-1)">-</button><h2>${goal.bite}</h2><button onclick="moveKI('${goal.id}',1)">+</button></div></div>`
+        output+=`<div class='keyIndicator' id='goal-${goal.id}'><h1 onclick='viewGoal("${goal.id}")'>${goal.title}</h1><div class='keyBar'><button onclick="moveKI('${goal.id}',-1)">-</button><h2>${goal.bite}</h2><button onclick="moveKI('${goal.id}',1)">+</button></div></div>`
         break
     }
   })
@@ -1008,6 +1002,14 @@ function newGoal(){
   document.getElementById('goalDiv').innerHTML = ''
   window.location.replace('#Goals')
   refreshGoals()
+}
+
+function viewGoal(id){
+  const goal = goals.find(o => o.id == id)
+  var display = ""
+  document.querySelector('#GoalView h1').innerHTML = goal.title
+  document.querySelector('#GoalView p').innerHTML = ''
+  window.location.hash = 'GoalView'
 }
 
 function moveKI(id,amount){
