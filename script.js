@@ -1041,7 +1041,7 @@ async function refreshHome(){
     })
   }
   threevents.forEach(event => {
-    if(minutesFromISO(event.start.dateTime)>minutesFromISO(new Date().toISOString())){var startPip = 'Now'}else{var startPip = minutesToHour(minutesFromISO(event.start.dateTime))}
+    if(minutesFromISO(event.start.dateTime)<minutesFromISO(new Date().toISOString())){var startPip = 'Now'}else{var startPip = minutesToHour(minutesFromISO(event.start.dateTime))}
     output+=`<p onclick='viewEvent("${event.id}")'><b>${event.summary}</b><br>${startPip} - ${minutesToHour(minutesFromISO(event.end.dateTime))}</p>`
   })
   if (threevents.length==0) output+=`<p><b>Nada, baby!</b></p>`
