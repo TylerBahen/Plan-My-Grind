@@ -1035,12 +1035,15 @@ async function refreshHome(){
   var threevents = []
   if (et!=undefined){
     et.forEach(event => {
-      if(threevents.length<3 && event.start.dateTime!=undefined && minutesFromISO(event.start.dateTime)>minutesFromISO(new Date().toISOString())){
+      if(threevents.length<3 && event.start.dateTime!=undefined && minutesFromISO(event.end.dateTime)>minutesFromISO(new Date().toISOString())){
         threevents.push(event)
       }
     })
   }
-  threevents.forEach(event => output+=`<p onclick='viewEvent("${event.id}")'><b>${event.summary}</b><br>${minutesToHour(minutesFromISO(event.start.dateTime))} - ${minutesToHour(minutesFromISO(event.end.dateTime))}</p>`)
+  threevents.forEach(event => {
+    if(minutesFromISO(event.start.dateTime)>minutesFromISO(new Date().toISOString())){var startPip = 'Now'}else{var startPip = minutesToHour(minutesFromISO(event.start.dateTime))}
+    output+=`<p onclick='viewEvent("${event.id}")'><b>${event.summary}</b><br>${startPip} - ${minutesToHour(minutesFromISO(event.end.dateTime))}</p>`
+  })
   if (threevents.length==0) output+=`<p><b>Nada, baby!</b></p>`
   output+=`</div>`
   //Goals Widget
